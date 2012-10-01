@@ -1,0 +1,138 @@
+@font-face {
+  font-family: 'DroidSansRegular';
+  src: url('/public/fonts/DroidSans-webfont.eot');
+  src: url('/public/fonts/DroidSans-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/public/fonts/DroidSans-webfont.woff') format('woff'),
+       url('/public/fonts/DroidSans-webfont.ttf') format('truetype'),
+       url('/public/fonts/DroidSans-webfont.svg#DroidSansRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BebasNeueRegular';
+  src: url('/public/fonts/BebasNeue-webfont.eot');
+  src: url('/public/fonts/BebasNeue-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/public/fonts/BebasNeue-webfont.woff') format('woff'),
+       url('/public/fonts/BebasNeue-webfont.ttf') format('truetype'),
+       url('/public/fonts/BebasNeue-webfont.svg#BebasNeueRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+html, body {
+    width: 100%;
+}
+
+body {
+    background: #cecece;
+    padding-top: 40px;
+}
+
+body {
+    font: 13px/19px 'DroidSansRegular', sans-serif !important;}
+}
+
+h1, h2, h3 {
+    font-family: 'BebasNeueRegular', 'Arial Narrow', 'Arial', sans-serif;
+    line-height: 0.7em;
+    font-weight: normal;
+}
+
+h1 {
+    font-size: 35px;
+    text-shadow: -1px -1px 0 rgba(80, 80, 80, 0.5);
+}
+
+h2 {
+  font-size: 30px;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+a, a:visited, a:link, a:hover {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.button {
+  background: #fff;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+  padding: 15px 0;
+  text-align:center;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  display:block;
+}
+
+.button:hover {
+    background: #eee;
+}
+
+#content {
+    width: 215px;
+    margin: 0 0 30px 30px;
+}
+
+#header {
+    position: fixed;
+    width: 100%;
+    top: 20px;
+    height: 40px;
+}
+
+#header h1 {
+    padding-left: 20px;
+    width: 970px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+#header h1 span.grey {
+    color:#999;
+}
+
+#navigation {
+    margin: 0 auto;
+    position: relative;
+    width: 990px;
+}
+
+#fixedwrap {
+    position: fixed;
+    width: 100%;
+    top: 60px;
+}
+
+#menu {
+    width: 260px;
+}
+
+#wrap {
+    margin: 20px auto 0 auto;
+    position: relative;
+    width: 990px;
+}
+
+#wrap #content {
+    margin-left: 275px;
+    padding-bottom: 25px;
+    width: 310px;
+    float: left;
+    position: relative;
+    z-index: 2;
+}
