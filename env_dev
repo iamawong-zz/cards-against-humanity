@@ -1,0 +1,3 @@
+#!/bin/sh
+export NODE_ENV="dev"
+supervisor -w server.js,client -e css\|js\|html server.js

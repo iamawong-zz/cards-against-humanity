@@ -4,6 +4,10 @@
 	"author": "Andrew Wong <iamawong@outlook.com>",
 	"description": "A real time implementation of the popular card game Cards-Against-Humanity",
 	"contributors": "Annie To <annotating@gmail.com>",
+	"scripts": {
+		   "dev": "./env_dev",
+		   "prod": "./env_prod"
+	},
 	"respository": {
 		       "type": "git",
 		       "url": "https://github.com/iamawong/cards-against-humanity"
