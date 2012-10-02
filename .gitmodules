@@ -1,0 +1,3 @@
+[submodule "deps/headjs"]
+	path = deps/headjs
+	url = https://github.com/headjs/headjs.git
