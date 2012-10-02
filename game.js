@@ -15,11 +15,73 @@ Game.prototype.resetDeck = function() {
 }
 
 Game.prototype.reset = function() {
+    this.resetDeck();
     this.players.forEach(function(player) {
 	if (null !== player) 
 	    player.score = 0;
     });
-    this.resetDeck();
+}
+
+Game.prototype.firstFreePlayerSlot = function() {
+  for (var i = 0; i < this.players.length; i++) {
+    if (this.players[i] === null) return i;
+  }
+  for (var i = 0; i < this.players.length; i++) {
+    if (!this.players[i].online) return i;
+  }
+  return 0;    
+}
+
+Game.prototype.getPlayerIndex = function(socket) {
+  for (var i = 0; i < this.players.length; i++) {
+    if (this.players[i] !== null &&
+        this.players[i].socket.id === socket.id)
+      return i;
+  }
+  return -1;
+}
+
+Game.prototype.getPlayer = function(socket) {
+    var playerIndex = this.getPlayerIndex(socket);
+    if (-1 === playerIndex)
+	return null;
+
+    return this.players[playerIndex];
+}
+
+Game.prototype.getBlackDeck = function() {
+    // Need to implement
+}
+
+Game.prototype.getWhiteDeck = function() {
+    // Need to implement
+}
+
+Game.prototype.getActivePlayers = function() {
+    return this.players.filter(function(player) {
+	return null !== player && player.online;
+    }
+}
+
+Game.prototype.getNumPlayers = function() {
+    return this.getActivePlayers.length;
+}
+
+Game.prototype.registerPlayer = function(socket, hash) {
+
+}
+
+Game.prototype.unregisterPlayer = function(socket, gameDone) {
+    var player = this.getPlayer(socket);
+    if (null === player)
+	return;
+    player.online = false;
+    // Do some kidn of message broadcast to tell people the player left.
+    setTimeout(function() {
+	if (0 === self.getNumPlayers()) {
+	    gameDone();
+	}
+    }, 600000);
 }
 
 function BlackCard(desc, action) {
