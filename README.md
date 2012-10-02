@@ -5,6 +5,7 @@ Multiplayer, real time implementation of the popular card game [Cards Against Hu
 
 After you clone: 
 
+      git submodule update --init --recursive
       npm install
 
 Run on dev:
