@@ -4,11 +4,12 @@ var http = require('http')
 , ams = require('ams')
 , connect = require('connect')
 , connectnowww = require('connect-no-www')
+, app
 , server
 , clientDir = __dirname + '/client'
 , depsDir = __dirname + '/deps'
 , publicDir = __dirname + '/public'
-, fontsDir = __dirname + '/fonts'
+, fontsDir = publicDir + '/fonts'
 , prod = process.env.NODE_ENV === 'prod';
 
 function configureFiles() {
@@ -50,10 +51,14 @@ function niceifyURL(req, res, next){
 
 configureFiles();
 
-server = connect.createServer(
-    connect.logger(':status :remote-addr :url in :response-timems')
-    , connectnowww()
-    , niceifyURL
-).listen(prod ? 80 : 3000);
+app = connect()
+    .use(connect.logger(':status :remote-addr :url in :response-time ms'))
+    .use(connectnowww())
+    .use(niceifyURL)
+    .use(connect.static(publicDir, {maxAge: prod ? 86400000 : 0}))
+    .use(connect.static(fontsDir, {maxAge: prod ? 86400000 : 0})
+);
+
+server = http.createServer(app).listen(prod ? 80 : 3000);
 
 socket.listen(server);
