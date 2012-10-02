@@ -1,0 +1,21 @@
+{
+	"name": "cards-against-humanity",
+	"version": "0.0.1",
+	"author": "Andrew Wong <iamawong@outlook.com>",
+	"description": "A real time implementation of the popular card game Cards-Against-Humanity",
+	"contributors": "Annie To <annotating@gmail.com>",
+	"respository": {
+		       "type": "git",
+		       "url": "https://github.com/iamawong/cards-against-humanity"
+	},
+	"dependencies": {
+			"ams"		: "0.0.x",
+			"connect"	: "1.0.x",
+			"socket.io"	: "0.9.x",
+			"supervisor" 	: "0.3.x"
+	},
+	"license": "mit",
+	"engines": {
+		   "node": "0.6.x"
+	}
+}
