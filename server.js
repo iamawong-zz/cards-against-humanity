@@ -10,7 +10,7 @@ var http = require('http')
 , depsDir = __dirname + '/deps'
 , publicDir = __dirname + '/public'
 , fontsDir = publicDir + '/fonts'
-, prod = process.env.NODE_ENV === 'prod';
+, prod = process.env.NODE_ENV === 'production';
 
 function configureFiles() {
     var options = {
@@ -62,3 +62,16 @@ app = connect()
 server = http.createServer(app).listen(prod ? 80 : 3000);
 
 socket.listen(server);
+socket.configure('production', function() {
+  socket.enable('browser client minification');  // send minified client
+  socket.enable('browser client etag');          // apply etag caching logic based on version number
+  socket.enable('browser client gzip');          // gzip the file
+  socket.set('log level', 1);                    // reduce logging
+  socket.set('transports', [                     // enable all transports (optional if you want flashsocket)
+      'websocket'
+    , 'flashsocket'
+    , 'htmlfile'
+    , 'xhr-polling'
+    , 'jsonp-polling'
+  ]);
+});
