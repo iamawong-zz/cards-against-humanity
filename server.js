@@ -6,6 +6,8 @@ var http = require('http')
 , connectnowww = require('connect-no-www')
 , app
 , server
+, Game = require('./game')
+, games = {}
 , clientDir = __dirname + '/client'
 , depsDir = __dirname + '/deps'
 , publicDir = __dirname + '/public'
@@ -27,12 +29,6 @@ function configureFiles() {
 };
 
 function niceifyURL(req, res, next){
-  if (/^\/game\/public/.exec(req.url)) {
-    res.writeHead(302, {
-      'Location': '/game/#!/' + getLatestPublicGame().hash
-    });
-    return res.end();
-  }
   if (/^\/game$/.exec(req.url)) {
     res.writeHead(301, { 'Location': '/game/' });
     return res.end();
@@ -47,6 +43,31 @@ function niceifyURL(req, res, next){
     req.url = '/index.html';
   }
   return next();
+}
+
+function getGame(hash) {
+    if (hash && hash in games) {
+	return games[hash];
+    }
+    hash = getUnusedHash();
+    return (games[hash] = new Game(io, hash));
+}
+
+function getUnusedHash() {
+    do { 
+	var hash = randString(5);
+    } while (hash in games);
+    return hash;
+}
+
+var CHARSET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A','C','D','E','F','G','H','J','K','L','M','N','P','Q','R','T','V','W','X','Y','Z'];
+
+function randString(num) {
+    var string = "";
+    while (string.length < num) {
+	string += CHARSET[Math.floor(Math.random() * CHARSET.length)];
+    }
+    return string;
 }
 
 configureFiles();
@@ -74,4 +95,28 @@ socket.configure('production', function() {
     , 'xhr-polling'
     , 'jsonp-polling'
   ]);
+});
+
+socket.sockets.on('connection', function(socket) {
+    var game = null;
+    socket.on('connect', function(msg) {
+	game = getGame(msg.hash);
+	game.registerPlayer(socket, msg.session);
+	if (msg.hash !== game.hash) {
+	    socket.emit('gameHash', game.hash);
+	}
+	// Other stuff to do here still.
+	console.log('socket connection ' + socket.id);
+    });
+    
+    socket.on('disconnect', function() {
+	if (!game) 
+	    return;
+	var hash = game.hash;
+	game.unregisterPlayer(socket, function() {
+	    delete games[hash];
+	    console.log('getting rid of ' + hash);
+	});
+	game = null;
+    });
 });

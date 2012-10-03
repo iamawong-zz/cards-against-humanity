@@ -1,7 +1,10 @@
+var CLIENT_EVENTS = ['init', 'select', 'start'];
+
 var Game = function(socket, hash) {
     this.socket = socket;
     this.players = [null, null, null, null, null, null, null, null, null, null];
     this.hash = hash;
+    this.gameAdminIndex = 0;
 
     this.reset();
 }
@@ -14,12 +17,58 @@ Game.prototype.resetDeck = function() {
     shuffle(this.whiteDeck);
 }
 
+Game.prototype.getBlackDeck = function() {
+    // Need to implement
+}
+
+Game.prototype.getWhiteDeck = function() {
+    // Need to implement
+}
+
 Game.prototype.reset = function() {
     this.resetDeck();
     this.players.forEach(function(player) {
 	if (null !== player) 
 	    player.score = 0;
     });
+    this.tzarIndex = -1;
+}
+
+Game.prototype.registerPlayer = function(socket, session) {
+    if (this.getNumPlayers >= this.players.length) {
+	return false;
+    }
+
+    var self = this;
+    CLIENT_EVENTS.forEach(function(event) {
+	socket.on(event, self.handleClientMessage(event, socket));
+    });
+    if (this.playerRejoined(socket, session)) {
+	return true;
+    }
+    
+    var playerIndex = this.firstFreePlayerSlot();
+    this.broadcast('join', playerIndex);
+    // send message?
+    this.players[playerIndex] = new Player(socket, session);
+    this.updateAdmin();
+    this.updatePlayersNeeded();
+}
+
+Game.prototype.unregisterPlayer = function(socket, gameDone) {
+    var playerIndex = this.getPlayerIndex(socket);
+    if (-1 === playerIndex)
+	return;
+    var player = this.players[playerIndex];
+    player.online = false;
+    this.broadcast('leave', playerIndex);
+    this.updateAdmin();
+    this.updatePlayersNeeded();
+    setTimeout(function() {
+	if (0 === self.getNumPlayers()) {
+	    gameDone();
+	}
+    }, 600000);
 }
 
 Game.prototype.firstFreePlayerSlot = function() {
@@ -49,39 +98,156 @@ Game.prototype.getPlayer = function(socket) {
     return this.players[playerIndex];
 }
 
-Game.prototype.getBlackDeck = function() {
-    // Need to implement
-}
-
-Game.prototype.getWhiteDeck = function() {
-    // Need to implement
-}
-
-Game.prototype.getActivePlayers = function() {
-    return this.players.filter(function(player) {
-	return null !== player && player.online;
-    }
-}
-
 Game.prototype.getNumPlayers = function() {
     return this.getActivePlayers.length;
 }
 
-Game.prototype.registerPlayer = function(socket, hash) {
+Game.prototype.getActivePlayers = function() {
+    var self = this;
+    return this.players.filter(function(player) {
+	return self.isActivePlayer(player);
+    });
+}
+
+Game.prototype.isActivePlayer = function(player) {
+    return null !== player && player.online;
+}
+
+Game.prototype.getPlayerData = function() {
+    var playerData = {};
+    for (var i = 0; i < this.players.length; i++) {
+	var player = this.players[i];
+	if (null !== player) {
+	    playerData[i] = {
+		score: player.score,
+		online: player.online		
+	    };
+	}
+    }
+    return playerData;
+}
+
+Game.prototype.playerRejoined = function(socket, session) {
+    for (var i = 0; i < this.players.length; i++) {
+	var player = this.players[i];
+	if (null === player) {
+	    continue;
+	}
+	if (player.socket.id === socket.id || player.session === session) {
+	    if (!player.online) {
+		this.broadcast('rejoin', i);
+		// send message?
+	    }
+	    player.online = true;
+	    player.socket = socket;
+	    player.session = session;
+	    this.updateAdmin();
+	    this.updatePlayersNeeded();
+	    return true;
+	}
+    }
+}
+
+Game.prototype.updateAdmin = function() {
+    var player = this.players[this.gameAdminIndex];
+    if (!this.isActivePlayer(player)) {
+	for (var i = 0; i < this.players.length; i++) {
+	    if (this.isActivePlayer(this.players[i])) {
+		this.gameAdminIndex = i;
+		break;
+	    }
+	}
+    }
+    this.broadcast('admin', this.gameAdminIndex);
+}
+
+Game.prototype.updateTzar = function() {
+    do {
+	this.tzarIndex = ++this.tzarIndex % this.players.length;
+	var tzar = this.players[this.tzarIndex];
+    } while (this.isActivePlayer(tzar));
+    this.broadcast('tzar', this.tzarIndex);
+}
+
+Game.prototype.updatePlayersNeeded = function() {
+    var numPlayers = this.getNumPlayers();
+    // If the game has started already, perhaps we can handle it better.
+    if (!this.started && numPlayers < 3) {
+	this.broadcast('remaining', 3 - numPlayers);
+    }
+}
+
+Game.prototype.fixPlayerHand = function(playerIdx) {
+    var player = this.players[playerIdx];
+    var tempHand = this.players.hand.filter(function(card) {
+	return null !== card;
+    });
+    while (tempHand.length < 10 && this.whiteDeck.length > 0) {
+	tempHand.push(this.getWhiteCard());
+    }
+    player.hand = tempHand;
+    var info = {
+	session: player.session,
+	hand: tempHand
+    };
+    this.broadcast('refill', info);
+}
+
+Game.prototype.getWhiteCard = function() {
+    if (this.whiteDeck.length <= 0) {
+	this.broadcast('white');
+	return;
+    }
+    return this.whiteDeck.shift();
+}
+
+Game.prototype.broadcast = function(event, message) {
+    console.log('for game: ' + this.hash);
+    console.log('broadcasting event: ' + event + ' with message: ' + message);
+    this.players.forEach(function(player) {
+	if (null !== player) {
+	    player.socket.emit(event, message);
+	}
+    });
+}
+
+Game.prototype.handleClientMessage = function(event, socket) {
+    var self = this;
+    return function(msg) {
+	var playerIdx = self.getPlayerIndex(socket);
+	if (-1 === playerIdx) {
+	    return;
+	}
+	console.log('receiving ' + event + ' from player ' + playerIdx + ' with message ' + msg);
+	self[event].call(self, playerIdx, message);
+    }
+}
+
+Game.prototype.init = function(playerIdx) {
+    this.players[playerIdx].socket.emit('init', {
+	players: this.getPlayerData(),
+	you: playerIdx
+    });
+}
+
+Game.prototype.start = function() {
+    
+}
+
+Game.prototype.select = function(playerIdx, card) {
 
 }
 
-Game.prototype.unregisterPlayer = function(socket, gameDone) {
-    var player = this.getPlayer(socket);
-    if (null === player)
-	return;
-    player.online = false;
-    // Do some kidn of message broadcast to tell people the player left.
-    setTimeout(function() {
-	if (0 === self.getNumPlayers()) {
-	    gameDone();
+Game.prototype.submit = function(playerIdx, cardDesc) {
+    var player = this.players[playerIdx];
+    for (var i = 0; i < player.hand.length; i++) {
+	var handCard = player.hand[i];
+	if (null !== handCard && handCard.desc === cardDesc) {
+	    player.hand[i] = null;
+	    break;
 	}
-    }, 600000);
+    }
+    this.fixPlayerHand(playerIdx);
 }
 
 function BlackCard(desc, action) {
@@ -89,14 +255,17 @@ function BlackCard(desc, action) {
     this.action = action;
 }
 
-function WhiteCard(desc) {
+function WhiteCard(desc, player) {
+    this.player = player;
     this.desc = desc;
 }
 
-function Player(socket, hash) {
+function Player(socket, session) {
     this.socket = socket;
-    this.hash = hash;
+    this.session = session;
     this.score = 0;
+    this.online = true;
+    this.hand = [null, null, null, null, null, null, null, null, null, null];
 }
 
 //+ Jonas Raoni Soares Silva

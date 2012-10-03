@@ -1,0 +1,1 @@
+SERVER_EVENTS = ['join', 'leave', 'rejoin', 'gameHash', 'admin', 'tzar', 'refill', 'white', 'black']
