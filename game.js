@@ -187,7 +187,7 @@ Game.prototype.fixPlayerHand = function(playerIdx) {
     }
     player.hand = tempHand;
     var info = {
-	session: player.session,
+	meIdx : playerIdx,
 	hand: tempHand
     };
     this.broadcast('refill', info);
@@ -226,7 +226,7 @@ Game.prototype.handleClientMessage = function(event, socket) {
 Game.prototype.init = function(playerIdx) {
     this.players[playerIdx].socket.emit('init', {
 	players: this.getPlayerData(),
-	you: playerIdx
+	myIdx: playerIdx
     });
 }
 
