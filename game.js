@@ -1,4 +1,4 @@
-var CLIENT_EVENTS = ['init', 'select', 'start'];
+var CLIENT_EVENTS = ['init', 'select', 'submit', 'start'];
 
 var Game = function(socket, hash) {
     this.socket = socket;
@@ -10,8 +10,8 @@ var Game = function(socket, hash) {
 }
 
 Game.prototype.resetDeck = function() {
-    this.blackDeck = getBlackDeck();
-    this.whiteDeck = getWhiteDeck();
+    this.blackDeck = this.getBlackDeck();
+    this.whiteDeck = this.getWhiteDeck();
 
     shuffle(this.blackDeck);
     shuffle(this.whiteDeck);
@@ -19,10 +19,33 @@ Game.prototype.resetDeck = function() {
 
 Game.prototype.getBlackDeck = function() {
     // Need to implement
+    return [new BlackCard("What is Batman's guilty pleasure?", 1),
+	    new BlackCard("What ended my last relationship?", 1),
+	    new BlackCard("What's that sound?", 1)];
 }
 
 Game.prototype.getWhiteDeck = function() {
     // Need to implement
+    return [new WhiteCard("Being on fire."),
+	    new WhiteCard("Racism."),
+	    new WhiteCard("Old-people smell."),
+	    new WhiteCard("A micropenis."),
+	    new WhiteCard("Women in yogurt commercials."),
+	    new WhiteCard("Classist undertones."),
+	    new WhiteCard("Not giving a shit about the Third World."),
+	    new WhiteCard("Sexting."),
+	    new WhiteCard("Roofies."),
+	    new WhiteCard("A windmill full of corpses."),
+	    new WhiteCard("The gays."),
+	    new WhiteCard("Oversized lollipops."),
+	    new WhiteCard("African children."),
+	    new WhiteCard("An asymmetric boob job."),
+	    new WhiteCard("Bingeing and purging."),
+	    new WhiteCard("The hardworking Mexican."),
+	    new WhiteCard("An Oedipus complex."),
+	    new WhiteCard("A tiny horse."),
+	    new WhiteCard("Boogers."),
+	    new WhiteCard("Penis envy."),];
 }
 
 Game.prototype.reset = function() {
@@ -31,11 +54,11 @@ Game.prototype.reset = function() {
 	if (null !== player) 
 	    player.score = 0;
     });
-    this.tzarIndex = -1;
+    this.tzarIdx = -1;
 }
 
 Game.prototype.registerPlayer = function(socket, session) {
-    if (this.getNumPlayers >= this.players.length) {
+    if (this.getNumPlayers() >= this.players.length) {
 	return false;
     }
 
@@ -99,7 +122,7 @@ Game.prototype.getPlayer = function(socket) {
 }
 
 Game.prototype.getNumPlayers = function() {
-    return this.getActivePlayers.length;
+    return this.getActivePlayers().length;
 }
 
 Game.prototype.getActivePlayers = function() {
@@ -163,10 +186,10 @@ Game.prototype.updateAdmin = function() {
 
 Game.prototype.updateTzar = function() {
     do {
-	this.tzarIndex = ++this.tzarIndex % this.players.length;
-	var tzar = this.players[this.tzarIndex];
+	this.tzarIdx = ++this.tzarIdx % this.players.length;
+	var tzar = this.players[this.tzarIdx];
     } while (this.isActivePlayer(tzar));
-    this.broadcast('tzar', this.tzarIndex);
+    this.broadcast('tzar', this.tzarIdx);
 }
 
 Game.prototype.updatePlayersNeeded = function() {
@@ -179,7 +202,7 @@ Game.prototype.updatePlayersNeeded = function() {
 
 Game.prototype.fixPlayerHand = function(playerIdx) {
     var player = this.players[playerIdx];
-    var tempHand = this.players.hand.filter(function(card) {
+    var tempHand = player.hand.filter(function(card) {
 	return null !== card;
     });
     while (tempHand.length < 10 && this.whiteDeck.length > 0) {
@@ -187,10 +210,10 @@ Game.prototype.fixPlayerHand = function(playerIdx) {
     }
     player.hand = tempHand;
     var info = {
-	meIdx : playerIdx,
+	playerIdx : playerIdx,
 	hand: tempHand
     };
-    this.broadcast('refill', info);
+    this.broadcast('newHand', info);
 }
 
 Game.prototype.getWhiteCard = function() {
@@ -199,6 +222,28 @@ Game.prototype.getWhiteCard = function() {
 	return;
     }
     return this.whiteDeck.shift();
+}
+
+Game.prototype.updateBlackCard = function() {
+    // Check if we have cards in the black deck, if not we'll just return. 
+    // We only do the broadcasting once, and that's done when we check after we remove a card.
+    if (this.blackDeck.length <= 0) {
+	return;
+    }
+    if (this.blackDeck.length > 0) {
+	var black =  this.blackDeck.shift();
+	this.broadcast('newBlack', {
+	    desc: black.desc,
+	    action: black.action,
+	    remaining: this.blackDeck.length
+	});
+    }
+}
+
+Game.prototype.nextRound = function() {
+    this.submittedWhites = [];
+    this.updateBlackCard();
+    this.updateTzar();
 }
 
 Game.prototype.broadcast = function(event, message) {
@@ -219,23 +264,37 @@ Game.prototype.handleClientMessage = function(event, socket) {
 	    return;
 	}
 	console.log('receiving ' + event + ' from player ' + playerIdx + ' with message ' + msg);
-	self[event].call(self, playerIdx, message);
+	self[event].call(self, playerIdx, msg);
     }
 }
 
-Game.prototype.init = function(playerIdx) {
-    this.players[playerIdx].socket.emit('init', {
+Game.prototype.initialize = function(playerIdx) {
+    this.players[playerIdx].socket.emit('initPlayer', {
 	players: this.getPlayerData(),
 	myIdx: playerIdx
     });
 }
 
-Game.prototype.start = function() {
-    
-}
-
 Game.prototype.select = function(playerIdx, card) {
-
+    console.log("player " + playerIdx + " selected card " + card);
+    if (playerIdx !== this.tzarIdx) {
+	console.log("!!!!!!!!!!!!!the tzaridx and the player who selected the card isn't the same!");
+    }
+    var winnerIdx;
+    for (var i = 0; i < this.submittedWhites.length; i++) {
+	var whiteCard = this.submittedWhites[i];
+	if (whiteCard.desc == card) {
+	    winnerIdx = whiteCard.playerIdx;
+	    break;
+	}
+    }
+    var winner = this.players[winnerIdx];
+    winner.score += 1;
+    this.broadcast('score', {
+	score: winner.score,
+	playerIdx: winnerIdx
+    });
+    this.nextRound();
 }
 
 Game.prototype.submit = function(playerIdx, cardDesc) {
@@ -243,6 +302,8 @@ Game.prototype.submit = function(playerIdx, cardDesc) {
     for (var i = 0; i < player.hand.length; i++) {
 	var handCard = player.hand[i];
 	if (null !== handCard && handCard.desc === cardDesc) {
+	    handCard.playerIdx = playerIdx;
+	    this.submittedWhites.push(handCard);u
 	    player.hand[i] = null;
 	    break;
 	}
@@ -250,13 +311,24 @@ Game.prototype.submit = function(playerIdx, cardDesc) {
     this.fixPlayerHand(playerIdx);
 }
 
+Game.prototype.start = function() {
+    console.log("starting the game.");
+    for (var i = 0; i < this.players.length; i++) {
+	var player = this.players[i];
+	if (!this.isActivePlayer(player)) {
+	    continue;
+	}
+	this.fixPlayerHand(i);
+    }
+    this.nextRound();
+}
+
 function BlackCard(desc, action) {
     this.desc = desc;
     this.action = action;
 }
 
-function WhiteCard(desc, player) {
-    this.player = player;
+function WhiteCard(desc) {
     this.desc = desc;
 }
 
@@ -277,3 +349,5 @@ function shuffle(v){
     ;
     return v;
 };
+
+module.exports = Game;

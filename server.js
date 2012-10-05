@@ -16,7 +16,11 @@ var http = require('http')
 
 function configureFiles() {
     var options = {
-	uglifyjs: true
+	uglifyjs: prod,
+	jstransport: false,
+	cssabspath: false,
+	cssdataimg: false,
+	texttransport: false
     };
     ams.build
 	.create(publicDir)
@@ -50,7 +54,8 @@ function getGame(hash) {
 	return games[hash];
     }
     hash = getUnusedHash();
-    return (games[hash] = new Game(io, hash));
+    console.log(hash);
+    return (games[hash] = new Game(socket, hash));
 }
 
 function getUnusedHash() {
@@ -82,7 +87,8 @@ app = connect()
 
 server = http.createServer(app).listen(prod ? 80 : 3000);
 
-socket.listen(server);
+socket = socket.listen(server);
+
 socket.configure('production', function() {
   socket.enable('browser client minification');  // send minified client
   socket.enable('browser client etag');          // apply etag caching logic based on version number
@@ -99,9 +105,10 @@ socket.configure('production', function() {
 
 socket.sockets.on('connection', function(socket) {
     var game = null;
-    socket.on('connect', function(msg) {
+    socket.on('initialize', function(msg) {
 	game = getGame(msg.hash);
 	game.registerPlayer(socket, msg.session);
+	(game.handleClientMessage('initialize', socket)).call(game, msg);
 	if (msg.hash !== game.hash) {
 	    socket.emit('gameHash', game.hash);
 	}

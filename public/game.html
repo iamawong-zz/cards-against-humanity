@@ -15,7 +15,17 @@ online with your friends"/>
     </div>
     <div id="wrap">
       <div id="content">
-	A lot of crap here.
+	<div id="announcement">
+	  This is the announcement.
+	</div>
+	<div id="hand">
+	</div>
+	<a id="start" class = "button">
+	  Start
+	</a>
+	<a id="submit" class="button">
+	  Submit
+	</a>
       </div>
     </div>
     <div id="fixedwrap"><div id="navigation">
@@ -30,7 +40,11 @@ online with your friends"/>
     <script src="/load.js"></script>
     <script>
       head.js('http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js'
-      , '/client.js');
+      , '/socket.io/socket.io.js'
+      , '/client.js'
+      , function() {
+        $(startGame);
+      });
     </script>
   </body>
 </html>
