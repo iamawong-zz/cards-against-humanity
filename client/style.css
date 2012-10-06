@@ -25,45 +25,36 @@
     padding: 0;
     list-style: none;
 }
-
 html, body {
     width: 100%;
 }
-
 body {
     background: #cecece;
     padding-top: 40px;
 }
-
 body {
     font: 13px/19px 'DroidSansRegular', sans-serif !important;}
 }
-
 h1, h2, h3 {
     font-family: 'BebasNeueRegular', 'Arial Narrow', 'Arial', sans-serif;
     line-height: 0.7em;
     font-weight: normal;
 }
-
 h1 {
     font-size: 35px;
     text-shadow: -1px -1px 0 rgba(80, 80, 80, 0.5);
 }
-
 h2 {
   font-size: 30px;
 }
-
 h3 {
   font-size: 22px;
 }
-
 a, a:visited, a:link, a:hover {
   color: #333;
   text-decoration: none;
   font-weight: bold;
 }
-
 .button {
   background: #fff;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
@@ -78,56 +69,85 @@ a, a:visited, a:link, a:hover {
   height: 100%;
   display:block;
 }
-
 .button:hover {
     background: #eee;
 }
-
+.p0 {color: #771536} 
+.p1 {color: #0E4647} 
+.p2 {color: #597725}
+.p3 {color: #302649}
+.p4 {color: #CCAA17}
+.p5 {color: #771536} 
+.p6 {color: #0E4647} 
+.p7 {color: #597725}
+.p8 {color: #302649}
+.p9 {color: #CCAA17}
 #content {
     width: 215px;
     margin: 0 0 30px 30px;
 }
-
 #header {
     position: fixed;
     width: 100%;
     top: 20px;
     height: 40px;
 }
-
 #header h1 {
     padding-left: 20px;
     width: 970px;
     margin: 0 auto;
     text-align: left;
 }
-
 #header h1 span.grey {
     color:#999;
 }
-
-#navigation {
+#fixinner {
     margin: 0 auto;
     position: relative;
     width: 990px;
 }
-
 #fixedwrap {
     position: fixed;
     width: 100%;
     top: 60px;
 }
-
 #menu {
     width: 260px;
 }
-
+#scoreboard {
+    width: 150px;
+    margin-top: 10px;
+    margin-left: 20px;
+    float: left;
+}
+#scoreboard li {
+    width: 100%;
+    font-size: 1.1em;
+    /*display: none;*/
+    margin-bottom: 20px;
+    position: relative;
+    text-align: right;
+    float: left;
+    clear: both;
+}
+#scoreboard li h3 {
+    clear: both;
+    float: left;
+    width: 100px;
+    text-align: left;
+}
+#scoreboard li h2 {
+    float: right;
+    text-align: right;
+    width: 100px;
+    font: bold 35px/20px "Arial Black", sans-serif; 
+    text-shadow: 0px 2px 3px #555;
+}
 #wrap {
     margin: 20px auto 0 auto;
     position: relative;
     width: 990px;
 }
-
 #wrap #content {
     margin-left: 275px;
     padding-bottom: 25px;

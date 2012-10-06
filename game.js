@@ -36,16 +36,7 @@ Game.prototype.getWhiteDeck = function() {
 	    new WhiteCard("Sexting."),
 	    new WhiteCard("Roofies."),
 	    new WhiteCard("A windmill full of corpses."),
-	    new WhiteCard("The gays."),
-	    new WhiteCard("Oversized lollipops."),
-	    new WhiteCard("African children."),
-	    new WhiteCard("An asymmetric boob job."),
-	    new WhiteCard("Bingeing and purging."),
-	    new WhiteCard("The hardworking Mexican."),
-	    new WhiteCard("An Oedipus complex."),
-	    new WhiteCard("A tiny horse."),
-	    new WhiteCard("Boogers."),
-	    new WhiteCard("Penis envy."),];
+	    new WhiteCard("An Oedipus complex.")];
 }
 
 Game.prototype.reset = function() {
@@ -188,7 +179,7 @@ Game.prototype.updateTzar = function() {
     do {
 	this.tzarIdx = ++this.tzarIdx % this.players.length;
 	var tzar = this.players[this.tzarIdx];
-    } while (this.isActivePlayer(tzar));
+    } while (!this.isActivePlayer(tzar));
     this.broadcast('tzar', this.tzarIdx);
 }
 
@@ -283,7 +274,7 @@ Game.prototype.select = function(playerIdx, card) {
     var winnerIdx;
     for (var i = 0; i < this.submittedWhites.length; i++) {
 	var whiteCard = this.submittedWhites[i];
-	if (whiteCard.desc == card) {
+	if (whiteCard.desc == card.desc) {
 	    winnerIdx = whiteCard.playerIdx;
 	    break;
 	}
@@ -297,13 +288,13 @@ Game.prototype.select = function(playerIdx, card) {
     this.nextRound();
 }
 
-Game.prototype.submit = function(playerIdx, cardDesc) {
+Game.prototype.submit = function(playerIdx, card) {
     var player = this.players[playerIdx];
     for (var i = 0; i < player.hand.length; i++) {
 	var handCard = player.hand[i];
-	if (null !== handCard && handCard.desc === cardDesc) {
+	if (null !== handCard && handCard.desc === card.desc) {
 	    handCard.playerIdx = playerIdx;
-	    this.submittedWhites.push(handCard);u
+	    this.submittedWhites.push(handCard);
 	    player.hand[i] = null;
 	    break;
 	}
@@ -312,7 +303,7 @@ Game.prototype.submit = function(playerIdx, cardDesc) {
 }
 
 Game.prototype.start = function() {
-    console.log("starting the game.");
+    this.tzarIdx = -1;
     for (var i = 0; i < this.players.length; i++) {
 	var player = this.players[i];
 	if (!this.isActivePlayer(player)) {

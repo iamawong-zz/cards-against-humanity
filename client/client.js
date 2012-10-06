@@ -24,10 +24,13 @@ function startGame() {
 
     $('#submit').click(submit);
     $('#start').click(start);
+    $('#select').click(select);
 }
 
 function start(event) {
     console.log('starting game');
+    // Announce that the game is starting perhaps.
+    $('#start').fadeOut(500);
     socket.emit('start');
     event.preventDefault();
 }
@@ -35,7 +38,17 @@ function start(event) {
 function submit(event) {
     // How do I decide which card is being submitted?
     console.log('submitting');
-    socket.emit('submit');
+    socket.emit('submit', {
+	desc: "A micropenis."
+    });
+    event.preventDefault();
+}
+
+function select(event) {
+    console.log('select');
+    socket.emit('select', {
+	desc: "A micropenis."
+    });
     event.preventDefault();
 }
 
@@ -56,22 +69,52 @@ function initializeGame() {
 // Data is comprised of myIdx and players.
 // We then display the player's and their scores in the view.
 function initPlayer(data) {
-    myIdx = data.myIdx;
-    
+    if ('myIdx' in data) {
+	myIdx = data.myIdx;
+    }
+    if ('players' in data) {
+	updatePlayers(data.players);
+    }
+}
+
+function updatePlayers(players) {
+    for (var i in players) {
+	var playerDiv = $('#p' + i);
+	if ('score' in players[i]) {
+	    playerDiv.children('h2').text('' + players[i].score);
+	}
+	if ('online' in players[i]) {
+	    if (players[i].online) {
+		playerDiv.children('.offline').fadeOut(1000);
+	    } else {
+		playerDiv.children('.offline').fadeIn(1000);
+	    }
+	}
+	playerDiv.slideDown();
+    }
 }
 
 // Updates the client that a player now occupies playerIdx.
 // What should happen here is that we show players that there is now a new player with playerIdx. IE player1 or player3
 function join(playerIdx) {
+    var players = {};
+    players[playerIdx] = {score: 0, online: true};
+    updatePlayers(players);    
 }
 
 // Opposite of leave.
 // Remove the div elements that contain this player.
 function leave(playerIdx) {
+    var players = {};
+    players[playerIdx] = {online: false};
+    updatePlayers(players);
 }
 
 // CUrrently it's the same as join. dont implement yet, maybe we dont need it.
 function rejoin(playerIdx) {
+    var players = {};
+    players[playerIdx] = {online: true};
+    updatePlayers(players);
 }
 
 // This is the hash of the game.
@@ -86,8 +129,7 @@ function gameHash(hash) {
 
 // This is a function to update the number of remaining players needed to start a game.
 function remaining(num) {
-    console.log("THe number of people remaining is " + num);
-    socket.emit('start');
+    console.log("The number of people remaining is " + num);
 }
 
 // Visual update of who the new admin is.
@@ -96,6 +138,7 @@ function admin(adminIdx) {
 
 // Visual update of who the new tzar is.
 function tzar(tzarIdx) {
+    console.log("TZARRRRRRRRRRRRRRRRR " + tzarIdx);
 }
 
 // Visual update of the score for the user. 
@@ -105,34 +148,25 @@ function score(data) {
 
 // Emission that indicates the next will/has started. THe data that comes along is the new black card.
 function newBlack(card) {
-    
+    $('#black').html(card.desc);
 }
 
 // Inside data is the playerIdx and the white cards that this playerIdx will hold.
 // Update the visuals with the cards.
 function newHand(data) {
     if (data.playerIdx === myIdx) {
-	console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#');
-	console.log(data.hand);
-	this.hand = data.hand;
-	console.log("#############");
-	console.log(this.hand);
-	displayHand();
+	updateAndDisplayHand(data.hand);
     }
 }
 
-function displayHand() {
-    console.log("#");
-    console.log(this.hand);
-    console.log(this.hand.length);
+function updateAndDisplayHand(newHand) {
+    hand = newHand
     var html = "<ul>";
-    for (var i = 0; i < this.hand.length; i++) {
-	console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-	console.log(this.hand[i]);
-	html += "<li>" + this.hand[i].desc + "</li>";
+    for (var i = 0; i < hand.length; i++) {
+	html += "<li>" + hand[i].desc + "</li>";
     }
     html += '</ul>';
-    $('#hand').append(html);
+    $('#hand').html(html);
 }
 
 // Visual update that we're out of white cards.

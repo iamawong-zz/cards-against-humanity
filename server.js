@@ -112,8 +112,6 @@ socket.sockets.on('connection', function(socket) {
 	if (msg.hash !== game.hash) {
 	    socket.emit('gameHash', game.hash);
 	}
-	// Other stuff to do here still.
-	console.log('socket connection ' + socket.id);
     });
     
     socket.on('disconnect', function() {
