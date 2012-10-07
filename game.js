@@ -14,6 +14,7 @@ Game.prototype.resetDeck = function() {
     this.whiteDeck = this.getWhiteDeck();
 
     shuffle(this.blackDeck);
+    console.log(this.blackDeck);
     shuffle(this.whiteDeck);
 }
 
@@ -21,7 +22,8 @@ Game.prototype.getBlackDeck = function() {
     // Need to implement
     return [new BlackCard("What is Batman's guilty pleasure?", 1),
 	    new BlackCard("What ended my last relationship?", 1),
-	    new BlackCard("What's that sound?", 1)];
+	    new BlackCard("What's that sound?", 1),
+	    new BlackCard("Why can't I sleep at night?", 1)];
 }
 
 Game.prototype.getWhiteDeck = function() {

@@ -45,46 +45,100 @@ h1 {
     text-shadow: -1px -1px 0 rgba(80, 80, 80, 0.5);
 }
 h2 {
-  font-size: 30px;
+    font-size: 30px;
 }
 h3 {
-  font-size: 22px;
+    font-size: 22px;
 }
 a, a:visited, a:link, a:hover {
-  color: #333;
-  text-decoration: none;
-  font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
 }
 .button {
-  background: #fff;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
-  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
-  padding: 15px 0;
-  text-align:center;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  -moz-border-radius: 10px;
-  width: 100%;
-  height: 100%;
-  display:block;
+    background: #fff;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    padding: 15px 0;
+    text-align:center;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    display:block;
 }
 .button:hover {
     background: #eee;
+}
+.cardText {
+    line-height: 30px;
+    font: 'Tahoma';
+    font-weight: bold;
+    font-size: 18px;
+    padding: 15px 15px 0px 15px;
+}
+.cahlogo {
+    font-size: 10px;
+    padding: 0px 0px 15px 15px;
+    position: relative;
+    bottom: 0px;
+}
+.black {
+    color: #000;
+}
+.white {
+    color: #fff;
+}
+.whitecard {
+    border: 2px solid #000;
+    background: #fff;
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+.whitecard:hover {
+    width: 192px;
+    height: 192px;
+}
+.offline {
+    display: none;
+    color: white;
+    background: #333;
+    position: absolute;
+    text-align: center;
+    padding-top: 18px;
+    top: -5px;
+    left: 0;
+    width: 200px;
+    height: 40px;
+    -moz-opacity: .70;
+    filter:alpha(opacity=70);
+    opacity: .70;
+    z-index: 4;
 }
 .p0 {color: #771536} 
 .p1 {color: #0E4647} 
 .p2 {color: #597725}
 .p3 {color: #302649}
 .p4 {color: #CCAA17}
-.p5 {color: #771536} 
-.p6 {color: #0E4647} 
-.p7 {color: #597725}
-.p8 {color: #302649}
-.p9 {color: #CCAA17}
+.p5 {color: #28A09A}
+.p6 {color: #9FBC42}
+.p7 {color: #D84E86}
+#blackcard {
+    border: 2px solid #fff;
+    background: #000;
+    width: 192px;
+    height: 192px;
+}
 #content {
     width: 215px;
     margin: 0 0 30px 30px;
+}
+#hand {
+    width: 100%;
+    height: 100px;
 }
 #header {
     position: fixed;
@@ -133,7 +187,7 @@ a, a:visited, a:link, a:hover {
 #scoreboard li h3 {
     clear: both;
     float: left;
-    width: 100px;
+    width: 120px;
     text-align: left;
 }
 #scoreboard li h2 {
@@ -142,6 +196,13 @@ a, a:visited, a:link, a:hover {
     width: 100px;
     font: bold 35px/20px "Arial Black", sans-serif; 
     text-shadow: 0px 2px 3px #555;
+}
+#start {
+    display: none;
+}
+#submitted {
+    width: 100%;
+    height: 120px;
 }
 #wrap {
     margin: 20px auto 0 auto;

@@ -1,4 +1,6 @@
 var socket
+, adminIdx
+, tzarIdx
 , myIdx
 , hand = []
 , SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'tzar', 'score', 'newBlack', 'newHand', 'white'];
@@ -71,6 +73,12 @@ function initializeGame() {
 function initPlayer(data) {
     if ('myIdx' in data) {
 	myIdx = data.myIdx;
+	console.log(myIdx);
+	console.log(adminIdx);
+	if (myIdx === adminIdx) {
+	    
+	    $('#start').fadeIn(1000);
+	}
     }
     if ('players' in data) {
 	updatePlayers(data.players);
@@ -133,11 +141,13 @@ function remaining(num) {
 }
 
 // Visual update of who the new admin is.
-function admin(adminIdx) {
+function admin(newAdminIdx) {
+    adminIdx = newAdminIdx;
 }
 
 // Visual update of who the new tzar is.
-function tzar(tzarIdx) {
+function tzar(newTzarIdx) {
+    tzarIdx = newTzarIdx;
     console.log("TZARRRRRRRRRRRRRRRRR " + tzarIdx);
 }
 
@@ -148,7 +158,7 @@ function score(data) {
 
 // Emission that indicates the next will/has started. THe data that comes along is the new black card.
 function newBlack(card) {
-    $('#black').html(card.desc);
+    $('#blackcard').children('.cardText').html(card.desc);
 }
 
 // Inside data is the playerIdx and the white cards that this playerIdx will hold.
