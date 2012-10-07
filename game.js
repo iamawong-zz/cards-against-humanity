@@ -18,29 +18,6 @@ Game.prototype.resetDeck = function() {
     shuffle(this.whiteDeck);
 }
 
-Game.prototype.getBlackDeck = function() {
-    // Need to implement
-    return [new BlackCard("What is Batman's guilty pleasure?", 1),
-	    new BlackCard("What ended my last relationship?", 1),
-	    new BlackCard("What's that sound?", 1),
-	    new BlackCard("Why can't I sleep at night?", 1)];
-}
-
-Game.prototype.getWhiteDeck = function() {
-    // Need to implement
-    return [new WhiteCard("Being on fire."),
-	    new WhiteCard("Racism."),
-	    new WhiteCard("Old-people smell."),
-	    new WhiteCard("A micropenis."),
-	    new WhiteCard("Women in yogurt commercials."),
-	    new WhiteCard("Classist undertones."),
-	    new WhiteCard("Not giving a shit about the Third World."),
-	    new WhiteCard("Sexting."),
-	    new WhiteCard("Roofies."),
-	    new WhiteCard("A windmill full of corpses."),
-	    new WhiteCard("An Oedipus complex.")];
-}
-
 Game.prototype.reset = function() {
     this.resetDeck();
     this.players.forEach(function(player) {
@@ -203,8 +180,9 @@ Game.prototype.fixPlayerHand = function(playerIdx) {
     }
     player.hand = tempHand;
     var info = {
+	hand: tempHand,
 	playerIdx : playerIdx,
-	hand: tempHand
+	whites: this.whiteDeck.length
     };
     this.broadcast('newHand', info);
 }
@@ -226,9 +204,9 @@ Game.prototype.updateBlackCard = function() {
     if (this.blackDeck.length > 0) {
 	var black =  this.blackDeck.shift();
 	this.broadcast('newBlack', {
-	    desc: black.desc,
 	    action: black.action,
-	    remaining: this.blackDeck.length
+	    blacks: this.blackDeck.length,
+	    desc: black.desc
 	});
     }
 }
@@ -314,6 +292,29 @@ Game.prototype.start = function() {
 	this.fixPlayerHand(i);
     }
     this.nextRound();
+}
+
+Game.prototype.getBlackDeck = function() {
+    // Need to implement
+    return [new BlackCard("What is Batman's guilty pleasure?", 1),
+	    new BlackCard("What ended my last relationship?", 1),
+	    new BlackCard("What's that sound?", 1),
+	    new BlackCard("Why can't I sleep at night?", 1)];
+}
+
+Game.prototype.getWhiteDeck = function() {
+    // Need to implement
+    return [new WhiteCard("Being on fire."),
+	    new WhiteCard("Racism."),
+	    new WhiteCard("Old-people smell."),
+	    new WhiteCard("A micropenis."),
+	    new WhiteCard("Women in yogurt commercials."),
+	    new WhiteCard("Classist undertones."),
+	    new WhiteCard("Not giving a shit about the Third World."),
+	    new WhiteCard("Sexting."),
+	    new WhiteCard("Roofies."),
+	    new WhiteCard("A windmill full of corpses."),
+	    new WhiteCard("An Oedipus complex.")];
 }
 
 function BlackCard(desc, action) {

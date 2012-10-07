@@ -72,24 +72,31 @@ a, a:visited, a:link, a:hover {
 .button:hover {
     background: #eee;
 }
-.cardText {
-    line-height: 30px;
-    font: 'Tahoma';
-    font-weight: bold;
-    font-size: 18px;
-    padding: 15px 15px 0px 15px;
-}
 .cahlogo {
     font-size: 10px;
     padding: 0px 0px 15px 15px;
     position: relative;
     bottom: 0px;
 }
+.cardText {
+    font: 'Tahoma';
+    font-weight: bold;
+}
 .black {
-    color: #000;
+    color: #fff;
+    font-size: 18px;
+    padding: 15px 15px 0px 15px;
+    line-height: 30px;
 }
 .white {
-    color: #fff;
+    color: #000;
+    font-size: 12px;
+    padding: 10px 10px 0px 10px;
+    line-height: 20px;
+}
+.logo {
+    font-size: 10px;
+    padding: 0px 0px 15px 15px;
 }
 .whitecard {
     border: 2px solid #000;
@@ -98,19 +105,18 @@ a, a:visited, a:link, a:hover {
     float: left;
     width: 140px;
     height: 140px;
-    -webkit-transform:scale(0.8); /*Webkit: Scale down image to 0.8x original size*/
-    -moz-transform:scale(0.8); /*Mozilla scale version*/
-    -o-transform:scale(0.8); /*Opera scale version*/
+    margin: 5px 5px 5px 5px; /*margin between images*/
+    z-index: -1;
     -webkit-transition-duration: 0.3s; /*Webkit: Animation duration*/
     -moz-transition-duration: 0.3s; /*Mozilla duration version*/
     -o-transition-duration: 0.3s; /*Opera duration version*/
-    margin: 0 10px 5px 0; /*margin between images*/
 }
 .whitecard:hover {
-    -webkit-transform:scale(1.1); /*Webkit: Scale up image to 1.2x original size*/
-    -moz-transform:scale(1.1); /*Mozilla scale version*/
-    -o-transform:scale(1.1); /*Opera scale version*/
     box-shadow:0px 0px 30px gray; /*CSS3 shadow: 30px blurred shadow all around image*/
+    z-index: 1;
+    -webkit-transform:scale(1.5); /*Webkit: Scale up image to 1.2x original size*/
+    -moz-transform:scale(1.5); /*Mozilla scale version*/
+    -o-transform:scale(1.5); /*Opera scale version*/
     -webkit-box-shadow:0px 0px 30px gray; /*Safari shadow version*/
     -moz-box-shadow:0px 0px 30px gray; /*Mozilla shadow version*/
 }
@@ -168,6 +174,10 @@ a, a:visited, a:link, a:hover {
 #header h1 span.grey {
     color:#999;
 }
+#infowrap {
+    position: relative;
+    float: right;
+}
 #fixinner {
     margin: 0 auto;
     position: relative;
@@ -213,9 +223,12 @@ a, a:visited, a:link, a:hover {
 #start {
     display: none;
 }
+#hand {
+    width: 250%;
+}
 #submitted {
     width: 250%;
-    height: 120px;
+    height: 330px;
 }
 #wrap {
     margin: 20px auto 0 auto;

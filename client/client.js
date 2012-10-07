@@ -1,6 +1,5 @@
 var socket
 , adminIdx
-, tzarIdx
 , myIdx
 , hand = []
 , SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'tzar', 'score', 'newBlack', 'newHand', 'white'];
@@ -29,6 +28,19 @@ function startGame() {
     $('#select').click(select);
 }
 
+function initializeGame() {
+    var sess = getCookie('sess') || randString(10);
+    // Set the cookie for an hour.
+    setCookie('sess', sess, 1.0/24);
+    var msg = {sess: sess};
+    var hash = window.location.hash;
+    if (hash) {
+	hash = hash.substring(hash.indexOf('#!/') + 3);
+	msg.hash = hash;
+    }
+    socket.emit('initialize', msg);
+}
+
 function start(event) {
     console.log('starting game');
     // Announce that the game is starting perhaps.
@@ -43,6 +55,8 @@ function submit(event) {
     socket.emit('submit', {
 	desc: "A micropenis."
     });
+    var html = "<div class = \"whitecard\"></div>";
+    $('#submitted').append(html);
     event.preventDefault();
 }
 
@@ -54,29 +68,13 @@ function select(event) {
     event.preventDefault();
 }
 
-function initializeGame() {
-    var sess = getCookie('sess') || randString(10);
-    // Set the cookie for an hour.
-    setCookie('sess', sess, 1.0/24);
-    var msg = {sess: sess};
-    var hash = window.location.hash;
-    if (hash) {
-	hash = hash.substring(hash.indexOf('#!/') + 3);
-	msg.hash = hash;
-    }
-    socket.emit('initialize', msg);
-}
-
 // Initializes the player's view with information. 
 // Data is comprised of myIdx and players.
 // We then display the player's and their scores in the view.
 function initPlayer(data) {
     if ('myIdx' in data) {
 	myIdx = data.myIdx;
-	console.log(myIdx);
-	console.log(adminIdx);
-	if (myIdx === adminIdx) {
-	    
+	if (myIdx === adminIdx) {	    
 	    $('#start').fadeIn(1000);
 	}
     }
@@ -102,23 +100,18 @@ function updatePlayers(players) {
     }
 }
 
-// Updates the client that a player now occupies playerIdx.
-// What should happen here is that we show players that there is now a new player with playerIdx. IE player1 or player3
 function join(playerIdx) {
     var players = {};
     players[playerIdx] = {score: 0, online: true};
     updatePlayers(players);    
 }
 
-// Opposite of leave.
-// Remove the div elements that contain this player.
 function leave(playerIdx) {
     var players = {};
     players[playerIdx] = {online: false};
     updatePlayers(players);
 }
 
-// CUrrently it's the same as join. dont implement yet, maybe we dont need it.
 function rejoin(playerIdx) {
     var players = {};
     players[playerIdx] = {online: true};
@@ -147,40 +140,57 @@ function admin(newAdminIdx) {
 
 // Visual update of who the new tzar is.
 function tzar(newTzarIdx) {
-    tzarIdx = newTzarIdx;
-    console.log("TZARRRRRRRRRRRRRRRRR " + tzarIdx);
+    $('#tzar').html("Current Card Tzar is: Player " + (newTzarIdx+1));
+    $('#select').fadeOut(500);
+    if (myIdx === newTzarIdx) {
+	$('#submit').fadeOut(500);
+    } else {
+	$('#submit').fadeIn(500);
+    }
 }
 
-// Visual update of the score for the user. 
-// The input in the data is the playerIdx and their current score.
 function score(data) {
+    console.log("updating score for " + data.playerIdx + " with " + data.score);
+    if ('score' in data && 'playerIdx' in data) {
+	var player = $('#p' + data.playerIdx);
+	player.children('h2').text(data.score);
+    }
 }
 
 // Emission that indicates the next will/has started. THe data that comes along is the new black card.
-function newBlack(card) {
-    $('#blackcard').children('.cardText').html(card.desc);
+function newBlack(data) {
+    if ('blacks' in data) {
+	$('#blacks').html("Black Cards Remaining: " + data.blacks);
+    }
+    if ('desc' in data) {
+	$('#blackcard').children('.cardText').html(data.desc);
+    }
 }
 
 // Inside data is the playerIdx and the white cards that this playerIdx will hold.
 // Update the visuals with the cards.
 function newHand(data) {
-    if (data.playerIdx === myIdx) {
+    if ('whites' in data) {
+	$('#whites').html("White Cards Remaining: " + data.whites);
+    }
+    if ('playerIdx' in data && 'hand' in data && data.playerIdx === myIdx) {
 	updateAndDisplayHand(data.hand);
     }
 }
 
 function updateAndDisplayHand(newHand) {
     hand = newHand
-    var html = "<ul>";
+    var html = "";
     for (var i = 0; i < hand.length; i++) {
-	html += "<li>" + hand[i].desc + "</li>";
+	html += "<div class=\"whitecard\"><div class=\"cardText white\">";
+	html += hand[i].desc;
+	html += "</div></div>"
     }
-    html += '</ul>';
     $('#hand').html(html);
 }
 
-// Visual update that we're out of white cards.
 function white() {
+    $('#whites').html("Out of white cards!");
 }
 
 function getCookie(name) {
