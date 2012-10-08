@@ -182,23 +182,28 @@ function round(data) {
 	$('#hand').show();
 	$('#submitted').show();
     });
-    $('#submitted').html("<h2>Submitted Cards</h2>");
+    /*$('#submitted').html("<h2>Submitted Cards</h2>");*/
     if ('tzarIdx' in data) {
 	tzarIdx = data.tzarIdx;
-	if (myIdx !== tzarIdx) {
-	    $('#submit').show();
-	}
-	showTzar();
+	handleTzar();
     }
     if ('blacks' in data) {
-	$('#blacks').html("Black Cards Remaining: " + data.blacks);
+	$('#blacks').html("<h2>Black Cards Remaining: " + data.blacks + "</h2>");
     }
     if ('desc' in data) {
 	$('#blackcard').children('.cardText').html(data.desc);
     }
 }
 
-function showTzar() {
+function handleTzar() {
+    var tzarOverlay = $('#hand').children('.tzar');
+    if (myIdx !== tzarIdx) {
+	$('#submit').show();
+	tzarOverlay.hide();
+    } else {
+	tzarOverlay.show();
+    }
+    
     for (var i = 0; i < 8; i++) {
 	var player = '#p' + i;
 	if (i === tzarIdx) {
@@ -229,7 +234,7 @@ function updateAndDisplayHand(newHand) {
     hand = newHand;
     handElem = [];
     submission = null;
-    $('#hand').html("<h2>Your hand</h2>");
+    $('#hand').html("<h2>Your hand</h2><div class='tzar'>YOU'RE TZAR</div>");
     $.each(newHand, function(idx, card) {
 	var c = $('<div/>', {
 	    'class': 'cardText white'

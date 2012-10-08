@@ -138,6 +138,22 @@ a, a:visited, a:link, a:hover {
     opacity: .70;
     z-index: 4;
 }
+#hand .tzar {
+    display: none;
+    color: white;
+    background: #333;
+    text-align: center;
+    margin-top: 5px;
+    padding-top: 10px;
+    line-height: 1em;
+    width: 752px;
+    height: 288px;
+    font-size: 140px;
+    -moz-opacity: .70;
+    filter:apha(opacity=70);
+    opacity: .70;
+    z-index: 4;
+}
 .tzar {
     color: white;
     font-size: 10px;
@@ -178,6 +194,12 @@ a, a:visited, a:link, a:hover {
     top: 20px;
     height: 40px;
 }
+#blacks {
+    width: 100%;
+}
+#blacks h2 {
+    float: right;
+}
 #header h1 {
     padding-left: 20px;
     width: 970px;
@@ -189,19 +211,18 @@ a, a:visited, a:link, a:hover {
 }
 #infowrap {
     display: none;
-    position: relative;
     float: right;
     width: 200px;
-}
-#fixinner {
-    margin: 0 auto;
-    position: relative;
-    width: 990px;
 }
 #fixedwrap {
     position: fixed;
     width: 100%;
     top: 60px;
+}
+#fixinner {
+    margin: 0 auto;
+    position: relative;
+    width: 990px;
 }
 #menu {
     width: 260px;
@@ -232,24 +253,19 @@ a, a:visited, a:link, a:hover {
     float: right; 
     text-shadow: 0px 2px 3px #555;
 }
-#start {
-    display: none;
-}
-#submit {
-    display: none;
-}
-#select {
+#start, #submit, #select {
     display: none;
 }
 #hand {
     display: none;
     width: 200%;
-    clear: both;
+    margin-top: 15px;
 }
 #submitted {
     display: none;
     width: 200%;
     height: 330px;
+    margin-top: 210px;
 }
 #hand h2, #submitted h2 {
     margin: 0px 0px 10px 0px;
