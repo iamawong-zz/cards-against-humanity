@@ -50,12 +50,6 @@ function initializeGame() {
 function start(event) {
     console.log('starting game');
     $('#start').fadeOut(500);
-    $('#announcement').fadeOut(500, function() {
-	$('#blackcard').fadeIn(10);
-	$('#infowrap').fadeIn(10);
-	$('#hand').fadeIn(10);
-	$('#submitted').fadeIn(10);
-    });
     socket.emit('start');
     event.preventDefault();
 }
@@ -181,6 +175,12 @@ function admin(newAdminIdx) {
 
 function round(data) {
     console.log('round');
+    $('#announcement').fadeOut(500, function() {
+	$('#blackcard').fadeIn(10);
+	$('#infowrap').fadeIn(10);
+	$('#hand').fadeIn(10);
+	$('#submitted').fadeIn(10);
+    });
     $('#submitted').html("<h2>Submitted Cards</h2>");
     if ('tzarIdx' in data) {
 	if (myIdx === data.tzarIdx) {
