@@ -272,6 +272,11 @@ Game.prototype.submit = function(playerIdx, card) {
 	    break;
 	}
     }
+    if (this.submittedWhites.length === this.getNumPlayers()) {
+	this.emit('allsubmitted', {
+	    submitted: this.submittedWhites
+	});
+    }
     this.fixPlayerHand(playerIdx);
 }
 
@@ -290,8 +295,6 @@ Game.prototype.start = function() {
 Game.prototype.getBlackDeck = function() {
     // Need to implement
     return [new BlackCard("What is Batman's guilty pleasure?", 1),
-	    new BlackCard("What ended my last relationship?", 1),
-	    new BlackCard("What's that sound?", 1),
 	    new BlackCard("Why can't I sleep at night?", 1)];
 }
 
@@ -307,7 +310,36 @@ Game.prototype.getWhiteDeck = function() {
 	    new WhiteCard("Sexting."),
 	    new WhiteCard("Roofies."),
 	    new WhiteCard("A windmill full of corpses."),
-	    new WhiteCard("An Oedipus complex.")];
+	    new WhiteCard("The gays."),
+	    new WhiteCard("Oversized lollipops."),
+	    new WhiteCard("African children."),
+	    new WhiteCard("An asymmetric boob job."),
+	    new WhiteCard("Bineing and purging."),
+	    new WhiteCard("The hardworking Mexican."),
+	    new WhiteCard("An Oedipus complex."),
+	    new WhiteCard("A tiny horse."),
+	    new WhiteCard("Boogers."),
+	    new WhiteCard("Penis envy."),
+	    new WhiteCard("Barack Obama."),
+	    new WhiteCard("My humps."),
+	    new WhiteCard("The Tempur-pedic Swedish Sleep System."),
+	    new WhiteCard("Scientology."),
+	    new WhiteCard("Dry heaving."),
+	    new WhiteCard("Skeletor."),
+	    new WhiteCard("Darth Vader."),
+	    new WhiteCard("Figgy pudding."),
+	    new WhiteCard("Chutzpah."),
+	    new WhiteCard("Five-Dollar Footlongs."),
+	    new WhiteCard("Elderly Japanese Men."),
+	    new WhiteCard("Free Samples."),
+	    new WhiteCard("Estrogen."),
+	    new WhiteCard("Sexual tension."),
+	    new WhiteCard("Famine."),
+	    new WhiteCard("A stray pube."),
+	    new WhiteCard("Men."),
+	    new WhiteCard("Heartwarming orphans."),
+	    new WhiteCard("Genital piercings."),
+	    new WhiteCard("A bag of magic beans.")];
 }
 
 function BlackCard(desc, action) {

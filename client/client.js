@@ -2,7 +2,12 @@ var socket
 , adminIdx
 , myIdx
 , hand = []
-, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white'];
+, handElem = []
+, submission
+, submittedCards
+, submittedElem = []
+, selected
+, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white', 'allsubmitted'];
 
 // This will be the main function that will be called after loading client.js. 
 // Needs to create the socket connection via Socket.io.
@@ -47,6 +52,8 @@ function start(event) {
     $('#announcement').fadeOut(500, function() {
 	$('#blackcard').fadeIn(10);
 	$('#infowrap').fadeIn(10);
+	$('#hand').fadeIn(10);
+	$('#submitted').fadeIn(10);
     });
     socket.emit('start');
     event.preventDefault();
@@ -55,8 +62,16 @@ function start(event) {
 function submit(event) {
     // How do I decide which card is being submitted?
     console.log('submitting');
+    console.log(submission);
+    if (null === submission) {
+	$('#announcement').html("<h1>You need to select a card.</h1>");
+	$('#announcement').fadeIn(10, function() {
+	    $('#announcement').fadeOut(3000);
+	});
+	return;
+    }
     socket.emit('submit', {
-	desc: "A micropenis."
+	desc: submission
     });
     var html = "<div class = \"whitecard\"></div>";
     $('#submitted').append(html);
@@ -65,8 +80,16 @@ function submit(event) {
 
 function select(event) {
     console.log('select');
+    console.log(selected);
+    if (selected === null) {
+	$('#announcement').html("<h1>You need to select a card.</h1>");
+	$('#announcement').fadeIn(10, function() {
+	    $('#announcement').fadeOut(3000);
+	});
+	return;
+    } 
     socket.emit('select', {
-	desc: "A micropenis."
+	desc: selected
     });
     event.preventDefault();
 }
@@ -150,13 +173,14 @@ function admin(newAdminIdx) {
 
 function round(data) {
     console.log('round');
+    $('#submitted').html("<h2>Submitted Cards</h2>");
     if ('tzarIdx' in data) {
-	$('#tzar').html("Current Card Tzar is: Player " + (data.tzarIdx+1));
-	$('#select').fadeOut(500);
 	if (myIdx === data.tzarIdx) {
-	    $('#submit').fadeOut(500);
+	    $('#submit').fadeOut(50);
+	    $('#select').fadeIn(500);
 	} else {
 	    $('#submit').fadeIn(500);
+	    $('#select').fadeOut(50);
 	}
     }
     if ('blacks' in data) {
@@ -187,14 +211,61 @@ function newHand(data) {
 }
 
 function updateAndDisplayHand(newHand) {
-    hand = newHand
-    var html = "";
-    for (var i = 0; i < hand.length; i++) {
-	html += "<div class=\"whitecard\"><div class=\"cardText white\">";
-	html += hand[i].desc;
-	html += "</div></div>"
+    hand = newHand;
+    handElem = [];
+    submission = null;
+    $('#hand').html("<h2>Your hand</h2>");
+    $.each(newHand, function(idx, card) {
+	var c = $('<div/>', {
+	    'class': 'cardText white'
+	});
+	c.append(card.desc);
+	var cardwrap = $('<div/>', {
+	    'class': 'whitecard',
+	    mousedown: function() {
+		selectCard(this, handElem, hand);
+	    }
+	});
+	cardwrap.append(c);
+	handElem.push(cardwrap);
+	$('#hand').append(cardwrap);
+    });
+}
+
+function allsubmitted(data) {
+    submittedCards = data.submitted;
+    submittedElem = [];
+    selected = null;
+    $('#submitted').html("<h2>Submitted Cards</h2>");
+    $.each(submittedCards, function(idx, card) {
+	var c = $('<div/>', {
+	    'class': 'cardText white'
+	});
+	c.append(card.desc);
+	var cardwrap = $('<div/>', {
+	    'class': 'whitecard',
+	    mousedown: function() {
+		selectCard(this, submittedElem, submittedCards);
+	    }
+	});
+	cardwrap.append(c);
+	submittedElem.push(cardwrap);
+	$('#submitted').append(cardwrap);
+    });
+}
+
+function selectCard(elem, elemArray, cardArray) {
+    var idx = elemArray.map(function(v) {
+	return v[0];
+    }).indexOf(elem);
+    for (var i = 0; i < cardArray.length; i++) {
+	if (idx === i) {
+	    elemArray[i].addClass('selected');
+	    submission = cardArray[i].desc;
+	} else {
+	    elemArray[i].removeClass('selected');
+	}
     }
-    $('#hand').html(html);
 }
 
 function white() {
