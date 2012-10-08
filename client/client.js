@@ -8,7 +8,7 @@ var socket
 , submittedCards
 , submittedElem = []
 , selected
-, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white', 'allsubmitted'];
+, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white', 'submitted', 'allsubmitted'];
 
 // This will be the main function that will be called after loading client.js. 
 // Needs to create the socket connection via Socket.io.
@@ -68,8 +68,6 @@ function submit(event) {
     socket.emit('submit', {
 	desc: submission
     });
-    var html = "<div class = \"whitecard\"></div>";
-    $('#submitted').append(html);
     event.preventDefault();
 }
 
@@ -259,6 +257,13 @@ function allsubmitted(data) {
 	submittedElem.push(cardwrap);
 	$('#submitted').append(cardwrap);
     });
+}
+
+function submitted(numOfSubmittedCards) {
+    $('#submitted').empty();
+    for (var i = 0; i < numOfSubmittedCards; i++) {
+	$('#submitted').append("<div class = \"whitecard\"></div>");
+    }
 }
 
 function submitCard(elem, elemArray, cardArray) {

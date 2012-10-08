@@ -14,7 +14,6 @@ Game.prototype.resetDeck = function() {
     this.whiteDeck = this.getWhiteDeck();
 
     shuffle(this.blackDeck);
-    console.log(this.blackDeck);
     shuffle(this.whiteDeck);
 }
 
@@ -269,11 +268,13 @@ Game.prototype.submit = function(playerIdx, card) {
 	if (null !== handCard && handCard.desc === card.desc) {
 	    handCard.playerIdx = playerIdx;
 	    this.submittedWhites.push(handCard);
+	    this.broadcast('submitted', this.submittedWhites.length);
 	    player.hand[i] = null;
 	    break;
 	}
     }
     if (this.submittedWhites.length === (this.getNumPlayers()-1)) {
+	shuffle(this.submittedWhites);
 	this.broadcast('allsubmitted', {
 	    submitted: this.submittedWhites
 	});
