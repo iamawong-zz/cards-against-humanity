@@ -154,14 +154,6 @@ Game.prototype.updateAdmin = function() {
     this.broadcast('admin', this.gameAdminIndex);
 }
 
-Game.prototype.updateTzar = function() {
-    do {
-	this.tzarIdx = ++this.tzarIdx % this.players.length;
-	var tzar = this.players[this.tzarIdx];
-    } while (!this.isActivePlayer(tzar));
-    this.broadcast('tzar', this.tzarIdx);
-}
-
 Game.prototype.updatePlayersNeeded = function() {
     var numPlayers = this.getNumPlayers();
     // If the game has started already, perhaps we can handle it better.
@@ -195,26 +187,26 @@ Game.prototype.getWhiteCard = function() {
     return this.whiteDeck.shift();
 }
 
-Game.prototype.updateBlackCard = function() {
-    // Check if we have cards in the black deck, if not we'll just return. 
-    // We only do the broadcasting once, and that's done when we check after we remove a card.
+Game.prototype.nextRound = function() {
+    this.submittedWhites = [];
     if (this.blackDeck.length <= 0) {
 	return;
     }
-    if (this.blackDeck.length > 0) {
-	var black =  this.blackDeck.shift();
-	this.broadcast('newBlack', {
-	    action: black.action,
-	    blacks: this.blackDeck.length,
-	    desc: black.desc
-	});
-    }
-}
+    // Update the TZAR index and also get the black card.
+    do {
+	this.tzarIdx = ++this.tzarIdx % this.players.length;
+	var tzar = this.players[this.tzarIdx];
+    } while (!this.isActivePlayer(tzar));
+    this.broadcast('tzar', this.tzarIdx);
 
-Game.prototype.nextRound = function() {
-    this.submittedWhites = [];
-    this.updateBlackCard();
-    this.updateTzar();
+    var black = this.blackDeck.shift();
+    
+    this.broadcast('round', {
+	action: black.action,
+	blacks: this.blackDeck.length, 
+	desc: black.desc,
+	tzarIdx: this.tzarIdx
+    });
 }
 
 Game.prototype.broadcast = function(event, message) {

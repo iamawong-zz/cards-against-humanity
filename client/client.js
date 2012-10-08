@@ -2,7 +2,7 @@ var socket
 , adminIdx
 , myIdx
 , hand = []
-, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'tzar', 'score', 'newBlack', 'newHand', 'white'];
+, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white'];
 
 // This will be the main function that will be called after loading client.js. 
 // Needs to create the socket connection via Socket.io.
@@ -151,14 +151,22 @@ function admin(newAdminIdx) {
     adminIdx = newAdminIdx;
 }
 
-// Visual update of who the new tzar is.
-function tzar(newTzarIdx) {
-    $('#tzar').html("Current Card Tzar is: Player " + (newTzarIdx+1));
-    $('#select').fadeOut(500);
-    if (myIdx === newTzarIdx) {
-	$('#submit').fadeOut(500);
-    } else {
-	$('#submit').fadeIn(500);
+function round(data) {
+    console.log('round');
+    if ('tzarIdx' in data) {
+	$('#tzar').html("Current Card Tzar is: Player " + (data.tzarIdx+1));
+	$('#select').fadeOut(500);
+	if (myIdx === data.tzarIdx) {
+	    $('#submit').fadeOut(500);
+	} else {
+	    $('#submit').fadeIn(500);
+	}
+    }
+    if ('blacks' in data) {
+	$('#blacks').html("Black Cards Remaining: " + data.blacks);
+    }
+    if ('desc' in data) {
+	$('#blackcard').children('.cardText').html(data.desc);
     }
 }
 
@@ -167,16 +175,6 @@ function score(data) {
     if ('score' in data && 'playerIdx' in data) {
 	var player = $('#p' + data.playerIdx);
 	player.children('h2').text(data.score);
-    }
-}
-
-// Emission that indicates the next will/has started. THe data that comes along is the new black card.
-function newBlack(data) {
-    if ('blacks' in data) {
-	$('#blacks').html("Black Cards Remaining: " + data.blacks);
-    }
-    if ('desc' in data) {
-	$('#blackcard').children('.cardText').html(data.desc);
     }
 }
 
