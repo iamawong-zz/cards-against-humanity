@@ -135,15 +135,12 @@ function gameHash(hash) {
 function remaining(num) {
     num = 0;
     if (num > 0) {
-	$('#announcement').fadeIn(500, function() {
-	    $('#announcement').html("<h1>Waiting to start</h1> Need " + num + " more players");
-	});
+	$('#announcement').html("<h1>Waiting to start</h1> Need " + num + " more players");
     } else if (num === 0 && myIdx === adminIdx) {
-	$('#announcement').fadeIn(500, function() {
-	    $('#announcement').html("<h1>Waiting to start</h1> Player " + (adminIdx + 1) + " should press start to start the game.");
-	});
-	$('#start').fadeIn(1000);
+	$('#announcement').html("<h1>Waiting to start</h1> Player " + (adminIdx + 1) + " should press start to start the game.");
     }
+	$('#announcement').fadeIn(500);
+	$('#start').fadeIn(1000);
 }
 
 // Visual update of who the new admin is.

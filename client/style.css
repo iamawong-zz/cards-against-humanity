@@ -101,15 +101,14 @@ a, a:visited, a:link, a:hover {
 .whitecard {
     border: 2px solid #000;
     background: #fff;
-    position: relative;
     float: left;
     width: 140px;
     height: 140px;
-    margin: 5px 5px 5px 5px; /*margin between images*/
+    margin: 5px 8px 5px 0px; /*margin between images*/
     z-index: -1;
-    -webkit-transition-duration: 0.3s; /*Webkit: Animation duration*/
-    -moz-transition-duration: 0.3s; /*Mozilla duration version*/
-    -o-transition-duration: 0.3s; /*Opera duration version*/
+    -webkit-transition-duration: 0.1s; /*Webkit: Animation duration*/
+    -moz-transition-duration: 0.1s; /*Mozilla duration version*/
+    -o-transition-duration: 0.1s; /*Opera duration version*/
 }
 .whitecard:hover {
     box-shadow:0px 0px 30px gray; /*CSS3 shadow: 30px blurred shadow all around image*/
