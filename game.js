@@ -6,7 +6,7 @@ var Game = function(socket, hash) {
     this.hash = hash;
     this.gameAdminIdx = 0;
 
-    this.reset();
+    this.started = false;
 }
 
 Game.prototype.resetDeck = function() {
@@ -156,8 +156,7 @@ Game.prototype.updateAdmin = function() {
 
 Game.prototype.updatePlayersNeeded = function() {
     var numPlayers = this.getNumPlayers();
-    // If the game has started already, perhaps we can handle it better.
-    if (!this.started && numPlayers < 3) {
+    if (!this.started) {
 	this.broadcast('remaining', 3 - numPlayers);
     }
 }
@@ -191,6 +190,7 @@ Game.prototype.nextRound = function() {
     this.submittedWhites = [];
     if (this.blackDeck.length <= 0) {
 	this.broadcast('gameover');
+	this.started = false;
 	return;
     }
     // Update the TZAR index and also get the black card.
@@ -243,8 +243,6 @@ Game.prototype.initialize = function(playerIdx) {
 
 Game.prototype.select = function(playerIdx, card) {
     console.log("player " + playerIdx + " selected card " + card);
-    if (playerIdx !== this.tzarIdx) {
-    }
     var winnerIdx;
     for (var i = 0; i < this.submittedWhites.length; i++) {
 	var whiteCard = this.submittedWhites[i];
@@ -285,6 +283,7 @@ Game.prototype.submit = function(playerIdx, card) {
 
 Game.prototype.start = function() {
     this.reset();
+    this.started = true;
     for (var i = 0; i < this.players.length; i++) {
 	var player = this.players[i];
 	if (!this.isActivePlayer(player)) {

@@ -132,7 +132,7 @@ function updatePlayers(players) {
 function join(playerIdx) {
     var players = {};
     players[playerIdx] = {score: 0, online: true};
-    updatePlayers(players);    
+    updatePlayers(players);
 }
 
 function leave(playerIdx) {
@@ -165,7 +165,8 @@ function remaining(num) {
     } else if (playersRequired <= 0) {
 	$('#announcement').html("<h1>Waiting to start</h1> Player " + (adminIdx + 1) + " should press start to start the game.");
     }
-	$('#announcement').fadeIn(500);
+    $('#announcement').fadeIn(500);
+    handleStartButton();
 }
 
 // Visual update of who the new admin is.
