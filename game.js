@@ -31,6 +31,10 @@ Game.prototype.registerPlayer = function(socket, session) {
     if (this.getNumPlayers() >= this.players.length) {
 	return false;
     }
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    console.log(socket.id);
+    console.log(session);
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
     var self = this;
     CLIENT_EVENTS.forEach(function(event) {
