@@ -259,13 +259,6 @@ function allsubmitted(data) {
     });
 }
 
-function submitted(numOfSubmittedCards) {
-    $('#submitted').empty();
-    for (var i = 0; i < numOfSubmittedCards; i++) {
-	$('#submitted').append("<div class = \"whitecard\"></div>");
-    }
-}
-
 function submitCard(elem, elemArray, cardArray) {
     var idx = elemArray.map(function(v) {
 	return v[0];
@@ -293,6 +286,17 @@ function selectCard(elem, elemArray, cardArray) {
 	}
     }
 }
+
+
+
+function submitted(numOfSubmittedCards) {
+    $('#submitted').empty();
+    for (var i = 0; i < numOfSubmittedCards; i++) {
+	$('#submitted').append("<div class = \"whitecard\"></div>");
+    }
+}
+
+
 
 function white() {
     $('#whites').html("Out of white cards!");
