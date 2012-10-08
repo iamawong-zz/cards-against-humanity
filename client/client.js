@@ -2,6 +2,7 @@ var socket
 , adminIdx
 , myIdx
 , tzarIdx
+, lastMsg
 , hand = []
 , handElem = []
 , gameStarted = false
@@ -9,7 +10,7 @@ var socket
 , submittedCards
 , submittedElem = []
 , selected
-, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white', 'submitted', 'allsubmitted'];
+, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white', 'submitted', 'allsubmitted', 'msg'];
 
 // This will be the main function that will be called after loading client.js. 
 // Needs to create the socket connection via Socket.io.
@@ -158,7 +159,7 @@ function remaining(num) {
     num = 0;
     if (num > 0) {
 	$('#announcement').html("<h1>Waiting to start</h1> Need " + num + " more players");
-    } else if (num === 0 && myIdx === adminIdx) {
+    } else if (num <= 0) {
 	$('#announcement').html("<h1>Waiting to start</h1> Player " + (adminIdx + 1) + " should press start to start the game.");
     }
 	$('#announcement').fadeIn(500);
@@ -187,12 +188,24 @@ function round(data) {
 	if (myIdx !== tzarIdx) {
 	    $('#submit').show();
 	}
+	showTzar();
     }
     if ('blacks' in data) {
 	$('#blacks').html("Black Cards Remaining: " + data.blacks);
     }
     if ('desc' in data) {
 	$('#blackcard').children('.cardText').html(data.desc);
+    }
+}
+
+function showTzar() {
+    for (var i = 0; i < 8; i++) {
+	var player = '#p' + i;
+	if (i === tzarIdx) {
+	    $(player).children('.tzar').show();
+	} else {
+	    $(player).children('.tzar').hide();
+	}
     }
 }
 
@@ -207,9 +220,6 @@ function score(data) {
 // Inside data is the playerIdx and the white cards that this playerIdx will hold.
 // Update the visuals with the cards.
 function newHand(data) {
-    if ('whites' in data) {
-	$('#whites').html("White Cards Remaining: " + data.whites);
-    }
     if ('playerIdx' in data && 'hand' in data && data.playerIdx === myIdx) {
 	updateAndDisplayHand(data.hand);
     }
@@ -290,19 +300,11 @@ function selectCard(elem, elemArray, cardArray) {
     }
 }
 
-
-
 function submitted(numOfSubmittedCards) {
     $('#submitted').empty();
     for (var i = 0; i < numOfSubmittedCards; i++) {
 	$('#submitted').append("<div class = \"whitecard\"></div>");
     }
-}
-
-
-
-function white() {
-    $('#whites').html("Out of white cards!");
 }
 
 function getCookie(name) {
