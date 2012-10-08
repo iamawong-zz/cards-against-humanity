@@ -243,9 +243,11 @@ function gameover() {
     $('#infowrap').hide();
     $('#hand').hide();
     $('#submitted').hide();
-    $('#announcement').html("<h1>Game over!</h1>Start to play again");
+    $('#announcement').html("<h1>Game over!</h1>Player " + (adminIdx+1) + " can hit start to play again");
     $('#announcement').show();
-    $('#start').show();
+    if (myIdx === adminIdx) {
+	$('#start').show();
+    }
 }
 
 function updateAndDisplayHand(newHand) {

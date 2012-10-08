@@ -284,7 +284,7 @@ Game.prototype.submit = function(playerIdx, card) {
 }
 
 Game.prototype.start = function() {
-    this.tzarIdx = -1;
+    this.reset();
     for (var i = 0; i < this.players.length; i++) {
 	var player = this.players[i];
 	if (!this.isActivePlayer(player)) {
