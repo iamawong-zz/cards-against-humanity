@@ -55,6 +55,7 @@ Game.prototype.unregisterPlayer = function(socket, gameDone) {
     this.broadcast('leave', playerIndex);
     this.updateAdmin();
     this.updatePlayersNeeded();
+    var self = this;
     setTimeout(function() {
 	if (0 === self.getNumPlayers()) {
 	    gameDone();
