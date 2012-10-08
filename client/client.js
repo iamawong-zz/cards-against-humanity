@@ -167,7 +167,6 @@ function remaining(num) {
 	$('#announcement').html("<h1>Waiting to start</h1> Player " + (adminIdx + 1) + " should press start to start the game.");
     }
 	$('#announcement').fadeIn(500);
-	$('#start').fadeIn(1000);
 }
 
 // Visual update of who the new admin is.
@@ -175,6 +174,8 @@ function admin(newAdminIdx) {
     adminIdx = newAdminIdx; 
     if (myIdx === adminIdx && !gameStarted) {
 	$('#start').fadeIn(500);
+    } else {
+	$('#start').fadeOut(500);
     }
 }
 
