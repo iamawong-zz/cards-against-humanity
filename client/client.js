@@ -6,6 +6,7 @@ var socket
 , hand = []
 , handElem = []
 , gameStarted = false
+, playersRequired = 100
 , submission
 , submittedCards
 , submittedElem = []
@@ -52,7 +53,8 @@ function initializeGame() {
 function start(event) {
     console.log('starting game');
     resetScores();
-    $('#start').fadeOut(500);    
+    gameStarted = true;
+    $('#start').hide(500);    
     socket.emit('start');
     event.preventDefault();
 }
@@ -157,10 +159,10 @@ function gameHash(hash) {
 
 // This is a function to update the number of remaining players needed to start a game.
 function remaining(num) {
-    num = 0;
-    if (num > 0) {
-	$('#announcement').html("<h1>Waiting to start</h1> Need " + num + " more players");
-    } else if (num <= 0) {
+    playersRequired = num;
+    if (playersRequired > 0) {
+	$('#announcement').html("<h1>Waiting to start</h1> Need " + playersRequired + " more players");
+    } else if (playersRequired <= 0) {
 	$('#announcement').html("<h1>Waiting to start</h1> Player " + (adminIdx + 1) + " should press start to start the game.");
     }
 	$('#announcement').fadeIn(500);
@@ -168,12 +170,8 @@ function remaining(num) {
 
 // Visual update of who the new admin is.
 function admin(newAdminIdx) {
-    adminIdx = newAdminIdx; 
-    if (myIdx === adminIdx && !gameStarted) {
-	$('#start').fadeIn(500);
-    } else {
-	$('#start').fadeOut(500);
-    }
+    adminIdx = newAdminIdx;
+    handleStartButton();
 }
 
 function round(data) {
@@ -189,7 +187,11 @@ function round(data) {
 	handleTzar();
     }
     if ('blacks' in data) {
-	$('#blacks').html("<h2>Black Cards Remaining: " + data.blacks + "</h2>");
+	if (data.blacks <= 0) {
+	    $('#blacks').html("<h2>Last round!</h2>");
+	} else {
+	    $('#blacks').html("<h2>Black Cards Remaining: " + data.blacks + "</h2>");
+	}
     }
     if ('desc' in data) {
 	$('#blackcard').children('.cardText').html(data.desc);
@@ -239,15 +241,30 @@ function newHand(data) {
 }
 
 function gameover() {
+    gameStarted = false;
     $('#blackcard').hide();
     $('#infowrap').hide();
     $('#hand').hide();
     $('#submitted').hide();
     $('#announcement').html("<h1>Game over!</h1>Player " + (adminIdx+1) + " can hit start to play again");
     $('#announcement').show();
-    if (myIdx === adminIdx) {
-	$('#start').show();
+    handleStartButton();
+}
+
+function handleStartButton() {
+    if (gameStarted) {
+	$('#start').hide();
+	return;
     }
+    if (myIdx !== adminIdx) {
+	$('#start').hide();
+	return;
+    }
+    if (playersRequired > 0) {
+	$('#start').hide();
+	return;
+    }
+    $('#start').show();
 }
 
 function updateAndDisplayHand(newHand) {
