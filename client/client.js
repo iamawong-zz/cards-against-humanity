@@ -3,6 +3,7 @@ var socket
 , myIdx
 , hand = []
 , handElem = []
+, gameStarted = false
 , submission
 , submittedCards
 , submittedElem = []
@@ -98,6 +99,9 @@ function select(event) {
 // Data is comprised of myIdx and players.
 // We then display the player's and their scores in the view.
 function initPlayer(data) {
+    if ('adminIdx' in data) {
+	admin(data.adminIdx);
+    }
     if ('myIdx' in data) {
 	myIdx = data.myIdx;
     }
@@ -168,7 +172,10 @@ function remaining(num) {
 
 // Visual update of who the new admin is.
 function admin(newAdminIdx) {
-    adminIdx = newAdminIdx;
+    adminIdx = newAdminIdx; 
+    if (myIdx === adminIdx && !gameStarted) {
+	$('#start').fadeIn(500);
+    }
 }
 
 function round(data) {

@@ -31,24 +31,17 @@ Game.prototype.registerPlayer = function(socket, session) {
     if (this.getNumPlayers() >= this.players.length) {
 	return false;
     }
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    console.log(socket.id);
-    console.log(session);
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
     var self = this;
     CLIENT_EVENTS.forEach(function(event) {
 	socket.on(event, self.handleClientMessage(event, socket));
     });
     if (this.playerRejoined(socket, session)) {
-	console.log("!!!!!!!!!!!!!!!!!!!!!!!!REJOINED");
 	return true;
     }
     
     var playerIndex = this.firstFreePlayerSlot();
-    console.log("!!!!!!!!!!!!!!!!PLAYERIDX" + playerIndex);
     this.broadcast('join', playerIndex);
-    // send message?
     this.players[playerIndex] = new Player(socket, session);
     this.updateAdmin();
     this.updatePlayersNeeded();
@@ -133,10 +126,6 @@ Game.prototype.playerRejoined = function(socket, session) {
 	    continue;
 	}
 	if (player.socket.id === socket.id || player.session === session) {
-	    console.log("@@@@@@@@@@@@@@@@@@@@@@@@");
-	    console.log(player.socket.id === socket.id);
-	    console.log(player.session === session);
-	    console.log("@@@@@@@@@@@@@@@@@@@@@@@@");
 	    if (!player.online) {
 		this.broadcast('rejoin', i);
 		// send message?
@@ -244,6 +233,7 @@ Game.prototype.handleClientMessage = function(event, socket) {
 
 Game.prototype.initialize = function(playerIdx) {
     this.players[playerIdx].socket.emit('initPlayer', {
+	adminIdx: gameAdminIdx,
 	remaining: 3 - this.getNumPlayers(),
 	players: this.getPlayerData(),
 	myIdx: playerIdx
