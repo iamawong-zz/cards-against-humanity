@@ -31,9 +31,7 @@ function startGame() {
 	socket.on(event, window[event]);
     });
 
-    $('#submit').click(submit);
     $('#start').click(start);
-    $('#select').click(select);
 }
 
 function initializeGame() {
@@ -235,6 +233,7 @@ function updateAndDisplayHand(newHand) {
     handElem = [];
     submission = null;
     $('#hand').html("<h2>Your hand</h2><a id='submit' class='button'>Play a card</a><div class='tzar'>YOU'RE TZAR</div>");
+    $('#submit').click(submit);
     $.each(newHand, function(idx, card) {
 	var c = $('<div/>', {
 	    'class': 'cardText white'
@@ -257,6 +256,7 @@ function allsubmitted(data) {
     submittedElem = [];
     selected = null;
     $('#submitted').html("<h2>Submitted Cards</h2><a id='select' class='button'>Select a winner</a>");
+    $('#select').click(select);
     if (tzarIdx === myIdx) {
 	$('#select').show();
     }
