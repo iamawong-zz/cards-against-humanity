@@ -107,7 +107,7 @@ socket.sockets.on('connection', function(socket) {
     var game = null;
     socket.on('initialize', function(msg) {
 	game = getGame(msg.hash);
-	game.registerPlayer(socket, msg.session);
+	game.registerPlayer(socket, msg.sess);
 	(game.handleClientMessage('initialize', socket)).call(game, msg);
 	if (msg.hash !== game.hash) {
 	    socket.emit('gameHash', game.hash);
