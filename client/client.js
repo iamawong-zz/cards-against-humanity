@@ -1,6 +1,7 @@
 var socket
 , adminIdx
 , myIdx
+, tzarIdx
 , hand = []
 , handElem = []
 , gameStarted = false
@@ -80,7 +81,8 @@ function select(event) {
 	    $('#announcement').fadeOut(3000);
 	});
 	return;
-    } 
+    }
+    $('#select').hide();
     socket.emit('select', {
 	desc: selected
     });
@@ -173,19 +175,17 @@ function admin(newAdminIdx) {
 
 function round(data) {
     $('#announcement').fadeOut(500, function() {
-	$('#blackcard').fadeIn(10);
-	$('#infowrap').fadeIn(10);
-	$('#hand').fadeIn(10);
-	$('#submitted').fadeIn(10);
+	$('#blackcard').show();
+	$('#infowrap').show();
+	$('#hand').show();
+	$('#submitted').show();
     });
     $('#submitted').html("<h2>Submitted Cards</h2>");
     if ('tzarIdx' in data) {
 	if (myIdx === data.tzarIdx) {
 	    $('#submit').fadeOut(50);
-	    $('#select').fadeIn(500);
 	} else {
 	    $('#submit').fadeIn(500);
-	    $('#select').fadeOut(50);
 	}
     }
     if ('blacks' in data) {
@@ -242,6 +242,9 @@ function allsubmitted(data) {
     submittedElem = [];
     selected = null;
     $('#submitted').html("<h2>Submitted Cards</h2>");
+    if (tzarIdx === myIdx) {
+	$('#select').show();
+    }
     $.each(submittedCards, function(idx, card) {
 	var c = $('<div/>', {
 	    'class': 'cardText white'
