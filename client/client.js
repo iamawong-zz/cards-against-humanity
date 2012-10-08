@@ -33,6 +33,7 @@ function startGame() {
 
     $('#start').click(start);
     $('#submit').click(submit);
+    $('#select').click(select);
 }
 
 function initializeGame() {
