@@ -32,6 +32,7 @@ function startGame() {
     });
 
     $('#start').click(start);
+    $('#submit').click(submit);
 }
 
 function initializeGame() {
@@ -180,7 +181,6 @@ function round(data) {
 	$('#hand').show();
 	$('#submitted').show();
     });
-    $('#submitted').html("<h2>Submitted Cards</h2>");
     if ('tzarIdx' in data) {
 	tzarIdx = data.tzarIdx;
 	handleTzar();
@@ -232,8 +232,10 @@ function updateAndDisplayHand(newHand) {
     hand = newHand;
     handElem = [];
     submission = null;
-    $('#hand').html("<h2>Your hand</h2><a id='submit' class='button'>Play a card</a><div class='tzar'>YOU'RE TZAR</div>");
-    $('#submit').click(submit);
+    var handCardArea = $('#hand').children('.cards');
+    handCardArea.empty()
+    /*$('#hand').html("<h2>Your hand</h2><a id='submit' class='button'>Play a card</a><div class='tzar'>YOU'RE TZAR</div>");*/
+    
     $.each(newHand, function(idx, card) {
 	var c = $('<div/>', {
 	    'class': 'cardText white'
@@ -247,7 +249,7 @@ function updateAndDisplayHand(newHand) {
 	});
 	cardwrap.append(c);
 	handElem.push(cardwrap);
-	$('#hand').append(cardwrap);
+	handCardArea.append(cardwrap);
     });
 }
 
@@ -255,8 +257,8 @@ function allsubmitted(data) {
     submittedCards = data.submitted;
     submittedElem = [];
     selected = null;
-    $('#submitted').html("<h2>Submitted Cards</h2><a id='select' class='button'>Select a winner</a>");
-    $('#select').click(select);
+    var cardArea = $('#submitted').children('.cards');
+    cardArea.empty();
     if (tzarIdx === myIdx) {
 	$('#select').show();
     }
@@ -273,7 +275,7 @@ function allsubmitted(data) {
 	});
 	cardwrap.append(c);
 	submittedElem.push(cardwrap);
-	$('#submitted').append(cardwrap);
+	cardArea.append(cardwrap);
     });
 }
 
@@ -306,9 +308,10 @@ function selectCard(elem, elemArray, cardArray) {
 }
 
 function submitted(numOfSubmittedCards) {
-    $('#submitted').empty();
+    var cardArea = $('#submitted').children('.cards');
+    cardArea.empty();
     for (var i = 0; i < numOfSubmittedCards; i++) {
-	$('#submitted').append("<div class = \"whitecard\"></div>");
+	cardArea.append("<div class = \"whitecard\"></div>");
     }
 }
 
