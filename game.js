@@ -274,7 +274,7 @@ Game.prototype.submit = function(playerIdx, card) {
 	}
     }
     if (this.submittedWhites.length === (this.getNumPlayers()-1)) {
-	this.emit('allsubmitted', {
+	this.broadcast('allsubmitted', {
 	    submitted: this.submittedWhites
 	});
     }
