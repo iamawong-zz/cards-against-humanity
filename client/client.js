@@ -174,7 +174,6 @@ function admin(newAdminIdx) {
 }
 
 function round(data) {
-    console.log('round');
     $('#announcement').fadeOut(500, function() {
 	$('#blackcard').fadeIn(10);
 	$('#infowrap').fadeIn(10);
@@ -210,10 +209,6 @@ function score(data) {
 // Inside data is the playerIdx and the white cards that this playerIdx will hold.
 // Update the visuals with the cards.
 function newHand(data) {
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    console.log(data.playerIdx);
-    console.log(myIdx);
-    console.log(data.hand);
     if ('whites' in data) {
 	$('#whites').html("White Cards Remaining: " + data.whites);
     }
@@ -227,8 +222,20 @@ function updateAndDisplayHand(newHand) {
     handElem = [];
     submission = null;
     $('#hand').html("<h2>Your hand</h2>");
-    processWhites('#hand', handElem, hand, function(cardwrap) {
-	selectCard(cardwrap, handElem, hand, submission);
+    $.each(newHand, function(idx, card) {
+	var c = $('<div/>', {
+	    'class': 'cardText white'
+	});
+	c.append(card.desc);
+	var cardwrap = $('<div/>', {
+	    'class': 'whitecard',
+	    mousedown: function() {
+		submitCard(this, handElem, hand);
+	    }
+	});
+	cardwrap.append(c);
+	handElem.push(cardwrap);
+	$('#hand').append(cardwrap);
     });
 }
 
@@ -237,35 +244,45 @@ function allsubmitted(data) {
     submittedElem = [];
     selected = null;
     $('#submitted').html("<h2>Submitted Cards</h2>");
-    processWhites('#submitted', submittedElem, submittedCards, function(cardwrap) {
-	selectCard(cardwrap, submittedElem, submittedCards, selected);
-    });
-}
-
-function processWhites(id, elemArray, cardArray, mousedown) {
-    $.each(cardArray, function(idx, card) {
+    $.each(submittedCards, function(idx, card) {
 	var c = $('<div/>', {
 	    'class': 'cardText white'
 	});
 	c.append(card.desc);
 	var cardwrap = $('<div/>', {
 	    'class': 'whitecard',
-	    mousedown: mousedown(this)
+	    mousedown: function() {
+		selectCard(this, submittedElem, submittedCards);
+	    }
 	});
 	cardwrap.append(c);
-	elemArray.push(cardwrap);
-	$(id).append(cardwrap);
+	submittedElem.push(cardwrap);
+	$('#submitted').append(cardwrap);
     });
 }
 
-function selectCard(elem, elemArray, cardArray, cardSave) {
+function submitCard(elem, elemArray, cardArray) {
     var idx = elemArray.map(function(v) {
 	return v[0];
     }).indexOf(elem);
     for (var i = 0; i < cardArray.length; i++) {
 	if (idx === i) {
 	    elemArray[i].addClass('selected');
-	    cardSave = cardArray[i].desc;
+	    submission = cardArray[i].desc;
+	} else {
+	    elemArray[i].removeClass('selected');
+	}
+    }
+}
+
+function selectCard(elem, elemArray, cardArray) {
+    var idx = elemArray.map(function(v) {
+	return v[0];
+    }).indexOf(elem);
+    for (var i = 0; i < cardArray.length; i++) {
+	if (idx === i) {
+	    elemArray[i].addClass('selected');
+	    selected = cardArray[i].desc;
 	} else {
 	    elemArray[i].removeClass('selected');
 	}
