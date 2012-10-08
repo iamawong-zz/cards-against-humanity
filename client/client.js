@@ -210,6 +210,10 @@ function score(data) {
 // Inside data is the playerIdx and the white cards that this playerIdx will hold.
 // Update the visuals with the cards.
 function newHand(data) {
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    console.log(data.playerIdx);
+    console.log(myIdx);
+    console.log(data.hand);
     if ('whites' in data) {
 	$('#whites').html("White Cards Remaining: " + data.whites);
     }
