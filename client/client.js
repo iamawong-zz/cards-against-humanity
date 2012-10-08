@@ -99,11 +99,11 @@ function select(event) {
 // Data is comprised of myIdx and players.
 // We then display the player's and their scores in the view.
 function initPlayer(data) {
-    if ('adminIdx' in data) {
-	admin(data.adminIdx);
-    }
     if ('myIdx' in data) {
 	myIdx = data.myIdx;
+    }
+    if ('adminIdx' in data) {
+	admin(data.adminIdx);
     }
     if ('players' in data) {
 	updatePlayers(data.players);
