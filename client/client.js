@@ -10,7 +10,7 @@ var socket
 , submittedCards
 , submittedElem = []
 , selected
-, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white', 'submitted', 'allsubmitted', 'msg'];
+, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white', 'submitted', 'allsubmitted', 'gameover'];
 
 // This will be the main function that will be called after loading client.js. 
 // Needs to create the socket connection via Socket.io.
@@ -51,7 +51,8 @@ function initializeGame() {
 
 function start(event) {
     console.log('starting game');
-    $('#start').fadeOut(500);
+    resetScores();
+    $('#start').fadeOut(500);    
     socket.emit('start');
     event.preventDefault();
 }
@@ -214,6 +215,13 @@ function handleTzar() {
     }
 }
 
+function resetScores() {
+    for (var i = 0; i < 8; i++) {
+	var player = $('#p' + i);
+	player.children('h2').text("0");
+    }
+}
+
 function score(data) {
     console.log("updating score for " + data.playerIdx + " with " + data.score);
     if ('score' in data && 'playerIdx' in data) {
@@ -228,6 +236,16 @@ function newHand(data) {
     if ('playerIdx' in data && 'hand' in data && data.playerIdx === myIdx) {
 	updateAndDisplayHand(data.hand);
     }
+}
+
+function gameover() {
+    $('#blackcard').hide();
+    $('#infowrap').hide();
+    $('#hand').hide();
+    $('#submitted').hide();
+    $('#announcement').html("<h1>Game over!</h1>Start to play again");
+    $('#announcement').show();
+    $('#start').show();
 }
 
 function updateAndDisplayHand(newHand) {

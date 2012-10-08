@@ -190,6 +190,7 @@ Game.prototype.getWhiteCard = function() {
 Game.prototype.nextRound = function() {
     this.submittedWhites = [];
     if (this.blackDeck.length <= 0) {
+	this.broadcast('gameover');
 	return;
     }
     // Update the TZAR index and also get the black card.
@@ -243,7 +244,6 @@ Game.prototype.initialize = function(playerIdx) {
 Game.prototype.select = function(playerIdx, card) {
     console.log("player " + playerIdx + " selected card " + card);
     if (playerIdx !== this.tzarIdx) {
-	console.log("!!!!!!!!!!!!!the tzaridx and the player who selected the card isn't the same!");
     }
     var winnerIdx;
     for (var i = 0; i < this.submittedWhites.length; i++) {
