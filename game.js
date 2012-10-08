@@ -273,7 +273,7 @@ Game.prototype.submit = function(playerIdx, card) {
 	    break;
 	}
     }
-    if (this.submittedWhites.length === this.getNumPlayers()) {
+    if (this.submittedWhites.length === (this.getNumPlayers()-1)) {
 	this.emit('allsubmitted', {
 	    submitted: this.submittedWhites
 	});
