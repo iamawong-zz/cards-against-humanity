@@ -243,16 +243,16 @@ a, a:visited, a:link, a:hover {
 }
 #hand {
     display: none;
-    width: 193%;
+    width: 200%;
     clear: both;
-}
-#hand h2, #submitted h2 {
-    margin: 0px 0px 10px 0px;
 }
 #submitted {
     display: none;
-    width: 250%;
+    width: 200%;
     height: 330px;
+}
+#hand h2, #submitted h2 {
+    margin: 0px 0px 10px 0px;
 }
 #wrap {
     margin: 20px auto 0 auto;
