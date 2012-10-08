@@ -235,7 +235,7 @@ function updateAndDisplayHand(newHand) {
 	var cardwrap = $('<div/>', {
 	    'class': 'whitecard',
 	    mousedown: function() {
-		selectCard(this, handElem, hand);
+		selectCard(this, handElem, hand, submission);
 	    }
 	});
 	cardwrap.append(c);
@@ -257,7 +257,7 @@ function allsubmitted(data) {
 	var cardwrap = $('<div/>', {
 	    'class': 'whitecard',
 	    mousedown: function() {
-		selectCard(this, submittedElem, submittedCards);
+		selectCard(this, submittedElem, submittedCards, selected);
 	    }
 	});
 	cardwrap.append(c);
@@ -266,14 +266,14 @@ function allsubmitted(data) {
     });
 }
 
-function selectCard(elem, elemArray, cardArray) {
+function selectCard(elem, elemArray, cardArray, cardSave) {
     var idx = elemArray.map(function(v) {
 	return v[0];
     }).indexOf(elem);
     for (var i = 0; i < cardArray.length; i++) {
 	if (idx === i) {
 	    elemArray[i].addClass('selected');
-	    submission = cardArray[i].desc;
+	    cardSave = cardArray[i].desc;
 	} else {
 	    elemArray[i].removeClass('selected');
 	}
