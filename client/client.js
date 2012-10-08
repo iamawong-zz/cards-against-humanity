@@ -66,6 +66,7 @@ function submit(event) {
 	});
 	return;
     }
+    $('#submit').hide();
     socket.emit('submit', {
 	desc: submission
     });
@@ -182,10 +183,9 @@ function round(data) {
     });
     $('#submitted').html("<h2>Submitted Cards</h2>");
     if ('tzarIdx' in data) {
-	if (myIdx === data.tzarIdx) {
-	    $('#submit').fadeOut(50);
-	} else {
-	    $('#submit').fadeIn(500);
+	tzarIdx = data.tzarIdx;
+	if (myIdx !== tzarIdx) {
+	    $('#submit').show();
 	}
     }
     if ('blacks' in data) {
