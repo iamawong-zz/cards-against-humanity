@@ -4,7 +4,7 @@ var Game = function(socket, hash) {
     this.socket = socket;
     this.players = [null, null, null, null, null, null, null, null, null, null];
     this.hash = hash;
-    this.gameAdminIndex = 0;
+    this.gameAdminIdx = 0;
 
     this.reset();
 }
@@ -142,16 +142,16 @@ Game.prototype.playerRejoined = function(socket, session) {
 }
 
 Game.prototype.updateAdmin = function() {
-    var player = this.players[this.gameAdminIndex];
+    var player = this.players[this.gameAdminIdx];
     if (!this.isActivePlayer(player)) {
 	for (var i = 0; i < this.players.length; i++) {
 	    if (this.isActivePlayer(this.players[i])) {
-		this.gameAdminIndex = i;
+		this.gameAdminIdx = i;
 		break;
 	    }
 	}
     }
-    this.broadcast('admin', this.gameAdminIndex);
+    this.broadcast('admin', this.gameAdminIdx);
 }
 
 Game.prototype.updatePlayersNeeded = function() {
