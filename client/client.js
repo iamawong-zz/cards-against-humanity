@@ -234,7 +234,7 @@ function updateAndDisplayHand(newHand) {
     hand = newHand;
     handElem = [];
     submission = null;
-    $('#hand').html("<h2>Your hand</h2><div class='tzar'>YOU'RE TZAR</div>");
+    $('#hand').html("<h2>Your hand</h2><div class='tzar'>YOU'RE TZAR</div><a id='submit' class='button'>Play a card</a>");
     $.each(newHand, function(idx, card) {
 	var c = $('<div/>', {
 	    'class': 'cardText white'
@@ -256,7 +256,7 @@ function allsubmitted(data) {
     submittedCards = data.submitted;
     submittedElem = [];
     selected = null;
-    $('#submitted').html("<h2>Submitted Cards</h2>");
+    $('#submitted').html("<h2>Submitted Cards</h2><a id='select' class='button'>Select a winner</a>");
     if (tzarIdx === myIdx) {
 	$('#select').show();
     }
