@@ -37,10 +37,12 @@ Game.prototype.registerPlayer = function(socket, session) {
 	socket.on(event, self.handleClientMessage(event, socket));
     });
     if (this.playerRejoined(socket, session)) {
+	console.log("!!!!!!!!!!!!!!!!!!!!!!!!REJOINED");
 	return true;
     }
     
     var playerIndex = this.firstFreePlayerSlot();
+    console.log("!!!!!!!!!!!!!!!!PLAYERIDX" + playerIndex);
     this.broadcast('join', playerIndex);
     // send message?
     this.players[playerIndex] = new Player(socket, session);
