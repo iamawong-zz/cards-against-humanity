@@ -76,7 +76,7 @@ a, a:visited, a:link, a:hover {
     font-size: 10px;
     padding: 0px 0px 15px 15px;
     position: relative;
-    bottom: 0px;
+    top: 90px;
 }
 .cardText {
     font: 'Tahoma';
@@ -136,6 +136,17 @@ a, a:visited, a:link, a:hover {
     opacity: .70;
     z-index: 4;
 }
+.tzar {
+    color: white;
+    font-size: 10px;
+    position: absolute;
+    text-align: left;
+    padding-top: 23px;
+    left: 0;
+    width: 200px;
+    height: 40px;
+    z-index: 4;
+}
 .p0 {color: #771536} 
 .p1 {color: #0E4647} 
 .p2 {color: #597725}
@@ -153,6 +164,7 @@ a, a:visited, a:link, a:hover {
     background: #000;
     width: 192px;
     height: 192px;
+    float: left;
 }
 #content {
     width: 215px;
@@ -181,7 +193,8 @@ a, a:visited, a:link, a:hover {
 #infowrap {
     display: none;
     position: relative;
-    float: left;
+    float: right;
+    width: 200px;
 }
 #fixinner {
     margin: 0 auto;
@@ -206,7 +219,7 @@ a, a:visited, a:link, a:hover {
     width: 100%;
     font-size: 1.1em;
     display: none;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     position: relative;
     text-align: right;
     float: left;
@@ -219,10 +232,7 @@ a, a:visited, a:link, a:hover {
     text-align: left;
 }
 #scoreboard li h2 {
-    float: right;
-    text-align: right;
-    width: 100px;
-    font: bold 35px/20px "Arial Black", sans-serif; 
+    float: right; 
     text-shadow: 0px 2px 3px #555;
 }
 #start {
@@ -235,7 +245,7 @@ a, a:visited, a:link, a:hover {
     display: none;
 }
 #hand {
-    width: 250%;
+    width: 193%;
 }
 #submitted {
     width: 250%;
@@ -247,9 +257,9 @@ a, a:visited, a:link, a:hover {
     width: 990px;
 }
 #wrap #content {
-    margin-left: 275px;
+    margin-left: 270px;
     padding-bottom: 25px;
-    width: 310px;
+    width: 400px;
     float: left;
     position: relative;
     z-index: 2;
