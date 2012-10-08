@@ -133,6 +133,10 @@ Game.prototype.playerRejoined = function(socket, session) {
 	    continue;
 	}
 	if (player.socket.id === socket.id || player.session === session) {
+	    console.log("@@@@@@@@@@@@@@@@@@@@@@@@");
+	    console.log(player.socket.id === socket.id);
+	    console.log(player.session === session);
+	    console.log("@@@@@@@@@@@@@@@@@@@@@@@@");
 	    if (!player.online) {
 		this.broadcast('rejoin', i);
 		// send message?
