@@ -85,7 +85,7 @@ app = connect()
     .use(connect.static(fontsDir, {maxAge: prod ? 86400000 : 0})
 );
 
-server = http.createServer(app).listen(prod ? 80 : 3000);
+server = http.createServer(app).listen(prod ? 8080 : 3000);
 
 socket = socket.listen(server);
 

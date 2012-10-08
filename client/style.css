@@ -144,7 +144,11 @@ a, a:visited, a:link, a:hover {
 .p5 {color: #28A09A}
 .p6 {color: #9FBC42}
 .p7 {color: #D84E86}
+#announcement {
+    line-height: 2em;
+}
 #blackcard {
+    display: none;
     border: 2px solid #fff;
     background: #000;
     width: 192px;
@@ -175,8 +179,9 @@ a, a:visited, a:link, a:hover {
     color:#999;
 }
 #infowrap {
+    display: none;
     position: relative;
-    float: right;
+    float: left;
 }
 #fixinner {
     margin: 0 auto;
@@ -200,7 +205,7 @@ a, a:visited, a:link, a:hover {
 #scoreboard li {
     width: 100%;
     font-size: 1.1em;
-    /*display: none;*/
+    display: none;
     margin-bottom: 20px;
     position: relative;
     text-align: right;
@@ -221,6 +226,12 @@ a, a:visited, a:link, a:hover {
     text-shadow: 0px 2px 3px #555;
 }
 #start {
+    display: none;
+}
+#submit {
+    display: none;
+}
+#select {
     display: none;
 }
 #hand {

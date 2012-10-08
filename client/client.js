@@ -15,7 +15,7 @@ function startGame() {
 	    $('#announcement').fadeOut(function() {
 		initializeGame();
 	    });
-	}, 1500);
+	}, 1000);
     });
 
     // Find out what this window parameter is
@@ -43,8 +43,11 @@ function initializeGame() {
 
 function start(event) {
     console.log('starting game');
-    // Announce that the game is starting perhaps.
     $('#start').fadeOut(500);
+    $('#announcement').fadeOut(500, function() {
+	$('#blackcard').fadeIn(10);
+	$('#infowrap').fadeIn(10);
+    });
     socket.emit('start');
     event.preventDefault();
 }
@@ -74,12 +77,12 @@ function select(event) {
 function initPlayer(data) {
     if ('myIdx' in data) {
 	myIdx = data.myIdx;
-	if (myIdx === adminIdx) {	    
-	    $('#start').fadeIn(1000);
-	}
     }
     if ('players' in data) {
 	updatePlayers(data.players);
+    }
+    if ('remaining' in data) {
+	remaining(data.remaining);
     }
 }
 
@@ -130,7 +133,17 @@ function gameHash(hash) {
 
 // This is a function to update the number of remaining players needed to start a game.
 function remaining(num) {
-    console.log("The number of people remaining is " + num);
+    num = 0;
+    if (num > 0) {
+	$('#announcement').fadeIn(500, function() {
+	    $('#announcement').html("<h1>Waiting to start</h1> Need " + num + " more players");
+	});
+    } else if (num === 0 && myIdx === adminIdx) {
+	$('#announcement').fadeIn(500, function() {
+	    $('#announcement').html("<h1>Waiting to start</h1> Player " + (adminIdx + 1) + " should press start to start the game.");
+	});
+	$('#start').fadeIn(1000);
+    }
 }
 
 // Visual update of who the new admin is.

@@ -241,6 +241,7 @@ Game.prototype.handleClientMessage = function(event, socket) {
 
 Game.prototype.initialize = function(playerIdx) {
     this.players[playerIdx].socket.emit('initPlayer', {
+	remaining: 3 - this.getNumPlayers(),
 	players: this.getPlayerData(),
 	myIdx: playerIdx
     });
