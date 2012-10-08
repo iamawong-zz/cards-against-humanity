@@ -155,6 +155,7 @@ a, a:visited, a:link, a:hover {
     z-index: 4;
 }
 .tzar {
+    display: none;
     color: white;
     font-size: 10px;
     position: absolute;
