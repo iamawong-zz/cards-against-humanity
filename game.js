@@ -145,6 +145,7 @@ Game.prototype.playerRejoined = function(socket, session) {
 	    return true;
 	}
     }
+    return false;
 }
 
 Game.prototype.updateAdmin = function() {
