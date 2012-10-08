@@ -182,6 +182,7 @@ function round(data) {
 	$('#hand').show();
 	$('#submitted').show();
     });
+    $('#submitted').children('.cards').empty();
     if ('tzarIdx' in data) {
 	tzarIdx = data.tzarIdx;
 	handleTzar();
