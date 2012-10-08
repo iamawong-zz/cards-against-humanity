@@ -227,20 +227,8 @@ function updateAndDisplayHand(newHand) {
     handElem = [];
     submission = null;
     $('#hand').html("<h2>Your hand</h2>");
-    $.each(newHand, function(idx, card) {
-	var c = $('<div/>', {
-	    'class': 'cardText white'
-	});
-	c.append(card.desc);
-	var cardwrap = $('<div/>', {
-	    'class': 'whitecard',
-	    mousedown: function() {
-		selectCard(this, handElem, hand, submission);
-	    }
-	});
-	cardwrap.append(c);
-	handElem.push(cardwrap);
-	$('#hand').append(cardwrap);
+    processWhites('#hand', handElem, hand, function(cardwrap) {
+	selectCard(cardwrap, handElem, hand, submission);
     });
 }
 
@@ -249,20 +237,24 @@ function allsubmitted(data) {
     submittedElem = [];
     selected = null;
     $('#submitted').html("<h2>Submitted Cards</h2>");
-    $.each(submittedCards, function(idx, card) {
+    processWhites('#submitted', submittedElem, submittedCards, function(cardwrap) {
+	selectCard(cardwrap, submittedElem, submittedCards, selected);
+    });
+}
+
+function processWhites(id, elemArray, cardArray, mousedown) {
+    $.each(cardArray, function(idx, card) {
 	var c = $('<div/>', {
 	    'class': 'cardText white'
 	});
 	c.append(card.desc);
 	var cardwrap = $('<div/>', {
 	    'class': 'whitecard',
-	    mousedown: function() {
-		selectCard(this, submittedElem, submittedCards, selected);
-	    }
+	    mousedown: mousedown(this)
 	});
 	cardwrap.append(c);
-	submittedElem.push(cardwrap);
-	$('#submitted').append(cardwrap);
+	elemArray.push(cardwrap);
+	$(id).append(cardwrap);
     });
 }
 
