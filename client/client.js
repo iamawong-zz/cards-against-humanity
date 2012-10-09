@@ -234,7 +234,7 @@ function score(data) {
     if ('card' in data) {
 	var cardIdx;
 	for (var i = 0; i < submittedCards.length; i++) {
-	    if (submittedCards[i] !== data.card) {
+	    if (submittedCards.desc !== data.card) {
 		continue;
 	    }
 	    cardIdx = i;
