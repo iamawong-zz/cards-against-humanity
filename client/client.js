@@ -20,10 +20,9 @@ function startGame() {
 
     socket.on('connect', function() {
 	$('#announcement').html('<h1>Connected!</h1>');
+	emptyAnnouncement(1000);
 	setTimeout(function() {
-	    $('#announcement').fadeOut(function() {
-		initializeGame();
-	    });
+	    initializeGame();
 	}, 1000);
     });
 
@@ -82,9 +81,7 @@ function select(event) {
 function noCardChosen(card) {
     if (null === card) {
 	$('#announcement').html("<h1>You need to select a card.</h1>");
-	$('#announcement').fadeIn(10, function() {
-	    $('#announcement').fadeOut(3000);
-	});
+	emptyAnnouncement(3000);
 	return true;
     }
     return false;
@@ -158,7 +155,6 @@ function remaining(num) {
     } else if (playersRequired <= 0) {
 	$('#announcement').html("<h1>Waiting to start</h1> Player " + (adminIdx + 1) + " should press start to start the game.");
     }
-    $('#announcement').fadeIn(500);
     handleStartButton();
 }
 
@@ -170,8 +166,8 @@ function admin(newAdminIdx) {
 
 function round(data) {
     $('#announcement').html("<h1>Next round in five...</h1>");
-    $('#announcement').fadeIn();
-    $('#announcement').fadeOut(5000, function() {
+    emptyAnnouncement(5000);
+    setTimeout(function() {
 	$('#blackcard').fadeIn();
 	$('#infowrap').fadeIn();
 	$('#hand').fadeIn();
@@ -191,7 +187,7 @@ function round(data) {
 	if ('desc' in data) {
 	    $('#blackcard').children('.cardText').html(data.desc);
 	}
-    });
+    }, 5000);
 }
 
 function handleTzar() {
@@ -211,6 +207,12 @@ function handleTzar() {
 	    $(player).children('.tzar').fadeOut();
 	}
     }
+}
+
+function emptyAnnouncement(time) {
+    setTimeout(function() {
+	$('#announcement').empty();
+    }, time);
 }
 
 function resetScores() {
@@ -252,7 +254,6 @@ function gameover() {
     $('#hand').fadeOut();
     $('#submitted').fadeOut();
     $('#announcement').html("<h1>Game over!</h1>Player " + (adminIdx+1) + " can hit start to play again");
-    $('#announcement').fadeIn();
     handleStartButton();
 }
 

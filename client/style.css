@@ -77,7 +77,7 @@ a, a:visited, a:link, a:hover {
 }
 .black {
     color: #fff;
-    font-size: 18px;
+    font-size: 16px;
     padding: 10px 15px 0px 15px;
     line-height: 25px;
 }
@@ -164,8 +164,9 @@ a, a:visited, a:link, a:hover {
 .p6 {color: #9FBC42}
 .p7 {color: #D84E86}
 #announcement {
+    height: 50px;
     line-height: 2em;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 #blackcard {
     display: none;
