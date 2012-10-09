@@ -417,7 +417,7 @@ Game.prototype.getWhiteDeck = function() {
 	    new WhiteCard("Men."),
 	    new WhiteCard("Heartwarming orphans."),
 	    new WhiteCard("Genital piercings."),
-	    new WhiteCard("A bag of magic beans."]),
+	    new WhiteCard("A bag of magic beans."),
 	    new WhiteCard("Repression."),
 	    new WhiteCard("Prancing."),
 	    new WhiteCard("My relationship status."),
