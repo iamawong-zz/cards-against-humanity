@@ -61,7 +61,7 @@ function submit(event) {
     if (noCardChosen(submission)) {
 	return;
     }
-    $('#submit').hide();
+    $('#submit').fadeOut();
     socket.emit('submit', {
 	desc: submission
     });
@@ -72,7 +72,7 @@ function select(event) {
     if (noCardChosen(selected)) {
 	return;
     }
-    $('#select').hide();
+    $('#select').fadeOut();
     socket.emit('select', {
 	desc: selected
     });
@@ -170,12 +170,12 @@ function admin(newAdminIdx) {
 
 function round(data) {
     $('#announcement').html("<h1>Next round in five...</h1>");
-    $('#announcement').show();
-    $('#announcement').hide(5000, function() {
-	$('#blackcard').show();
-	$('#infowrap').show();
-	$('#hand').show();
-	$('#submitted').show();
+    $('#announcement').fadeIn();
+    $('#announcement').fadeOut(5000, function() {
+	$('#blackcard').fadeIn();
+	$('#infowrap').fadeIn();
+	$('#hand').fadeIn();
+	$('#submitted').fadeIn();
 	$('#submitted').children('.cards').empty();
 	if ('tzarIdx' in data) {
 	    tzarIdx = data.tzarIdx;
@@ -197,18 +197,18 @@ function round(data) {
 function handleTzar() {
     var tzarOverlay = $('#hand').children('.tzar');
     if (myIdx !== tzarIdx) {
-	$('#submit').show();
-	tzarOverlay.hide();
+	$('#submit').fadeIn();
+	tzarOverlay.fadeOut();
     } else {
-	tzarOverlay.show();
+	tzarOverlay.fadeIn();
     }
     
     for (var i = 0; i < 8; i++) {
 	var player = '#p' + i;
 	if (i === tzarIdx) {
-	    $(player).children('.tzar').show();
+	    $(player).children('.tzar').fadeIn();
 	} else {
-	    $(player).children('.tzar').hide();
+	    $(player).children('.tzar').fadeOut();
 	}
     }
 }
@@ -247,29 +247,29 @@ function newHand(data) {
 
 function gameover() {
     gameStarted = false;
-    $('#blackcard').hide();
-    $('#infowrap').hide();
-    $('#hand').hide();
-    $('#submitted').hide();
+    $('#blackcard').fadeOut();
+    $('#infowrap').fadeOut();
+    $('#hand').fadeOut();
+    $('#submitted').fadeOut();
     $('#announcement').html("<h1>Game over!</h1>Player " + (adminIdx+1) + " can hit start to play again");
-    $('#announcement').show();
+    $('#announcement').fadeIn();
     handleStartButton();
 }
 
 function handleStartButton() {
     if (gameStarted) {
-	$('#start').hide();
+	$('#start').fadeOut();
 	return;
     }
     if (myIdx !== adminIdx) {
-	$('#start').hide();
+	$('#start').fadeOut();
 	return;
     }
     if (playersRequired > 0) {
-	$('#start').hide();
+	$('#start').fadeOut();
 	return;
     }
-    $('#start').show();
+    $('#start').fadeIn();
 }
 
 function updateAndDisplayHand(newHand) {
@@ -304,7 +304,7 @@ function allsubmitted(data) {
     var cardArea = $('#submitted').children('.cards');
     cardArea.empty();
     if (tzarIdx === myIdx) {
-	$('#select').show();
+	$('#select').fadeIn();
     }
     $.each(submittedCards, function(idx, card) {
 	var c = $('<div/>', {
