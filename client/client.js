@@ -3,6 +3,7 @@ var socket
 , myIdx
 , tzarIdx
 , lastMsg
+, blacksRemaining
 , hand = []
 , handElem = []
 , gameStarted = false
@@ -20,7 +21,7 @@ function startGame() {
 
     socket.on('connect', function() {
 	$('#announcement').html('<h1>Connected!</h1>');
-	emptyAnnouncement(1000);
+	defaultAnnouncement(1000);
 	setTimeout(function() {
 	    initializeGame();
 	}, 1000);
@@ -81,7 +82,7 @@ function select(event) {
 function noCardChosen(card) {
     if (null === card) {
 	$('#announcement').html("<h1>You need to select a card.</h1>");
-	emptyAnnouncement(3000);
+	defaultAnnouncement(3000);
 	return true;
     }
     return false;
@@ -166,10 +167,9 @@ function admin(newAdminIdx) {
 
 function round(data) {
     $('#announcement').html("<h1>Next round in five...</h1>");
-    emptyAnnouncement(5000);
+    defaultAnnouncement(5000);
     setTimeout(function() {
 	$('#blackcard').fadeIn();
-	$('#infowrap').fadeIn();
 	$('#hand').fadeIn();
 	$('#submitted').fadeIn();
 	$('#submitted').children('.cards').empty();
@@ -178,11 +178,7 @@ function round(data) {
 	    handleTzar();
 	}
 	if ('blacks' in data) {
-	    if (data.blacks <= 0) {
-		$('#blacks').html("<h2>Last round!</h2>");
-	    } else {
-		$('#blacks').html("<h2>Black Cards Remaining: " + data.blacks + "</h2>");
-	    }
+	    blacksRemaining = data.blacks;
 	}
 	if ('desc' in data) {
 	    $('#blackcard').children('.cardText').html(data.desc);
@@ -209,9 +205,9 @@ function handleTzar() {
     }
 }
 
-function emptyAnnouncement(time) {
+function defaultAnnouncement(time) {
     setTimeout(function() {
-	$('#announcement').empty();
+	$('#announcement').html("<h2>Black Cards Left: " + blacksRemaining + " </h2>");
     }, time);
 }
 
@@ -250,7 +246,6 @@ function newHand(data) {
 function gameover() {
     gameStarted = false;
     $('#blackcard').fadeOut();
-    $('#infowrap').fadeOut();
     $('#hand').fadeOut();
     $('#submitted').fadeOut();
     $('#announcement').html("<h1>Game over!</h1>Player " + (adminIdx+1) + " can hit start to play again");

@@ -181,12 +181,6 @@ a, a:visited, a:link, a:hover {
     margin-top: 20px;
     height: 40px;
 }
-#blacks {
-    width: 100%;
-}
-#blacks h2 {
-    float: right;
-}
 #header h1 {
     padding-left: 20px;
     width: 970px;
@@ -195,11 +189,6 @@ a, a:visited, a:link, a:hover {
 }
 #header h1 span.grey {
     color:#999;
-}
-#infowrap {
-    display: none;
-    float: right;
-    width: 200px;
 }
 #fixedwrap {
     position: fixed;
