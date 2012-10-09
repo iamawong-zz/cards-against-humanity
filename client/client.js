@@ -21,7 +21,6 @@ function startGame() {
 
     socket.on('connect', function() {
 	$('#announcement').html('<h1>Connected!</h1>');
-	defaultAnnouncement(1000);
 	setTimeout(function() {
 	    initializeGame();
 	}, 1000);
@@ -167,7 +166,6 @@ function admin(newAdminIdx) {
 
 function round(data) {
     $('#announcement').html("<h1>Next round in five...</h1>");
-    defaultAnnouncement(5000);
     setTimeout(function() {
 	$('#blackcard').fadeIn();
 	$('#hand').fadeIn();
@@ -184,6 +182,7 @@ function round(data) {
 	    $('#blackcard').children('.cardText').html(data.desc);
 	}
     }, 5000);
+    defaultAnnouncement(5000);
 }
 
 function handleTzar() {
