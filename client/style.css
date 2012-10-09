@@ -248,7 +248,7 @@ a, a:visited, a:link, a:hover {
     display: none;
     width: 200%;
     height: 330px;
-    margin-top: 210px;
+    margin-top: 220px;
 }
 #submitted {
     display: none;
@@ -256,7 +256,7 @@ a, a:visited, a:link, a:hover {
     margin-top: 15px;
 }
 #hand h2, #submitted h2 {
-    margin: 0px 0px 10px 0px;
+    margin: 10px 0px 0px 0px;
 }
 #wrap {
     margin: 0 auto 0 auto;
