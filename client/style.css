@@ -176,6 +176,7 @@ a, a:visited, a:link, a:hover {
 .p7 {color: #D84E86}
 #announcement {
     line-height: 2em;
+    margin-bottom: 20px;
 }
 #blackcard {
     display: none;
