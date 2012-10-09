@@ -51,7 +51,6 @@ function initializeGame() {
 }
 
 function start(event) {
-    console.log('starting game');
     gameStarted = true;
     $('#start').hide(500);    
     socket.emit('start');
@@ -59,14 +58,23 @@ function start(event) {
 }
 
 function submit(event) {
-    console.log('submitting');
-    console.log(submission);
     if (noCardChosen(submission)) {
 	return;
     }
     $('#submit').hide();
     socket.emit('submit', {
 	desc: submission
+    });
+    event.preventDefault();
+}
+
+function select(event) {
+    if (noCardChosen(selected)) {
+	return;
+    }
+    $('#select').hide();
+    socket.emit('select', {
+	desc: selected
     });
     event.preventDefault();
 }
@@ -80,19 +88,6 @@ function noCardChosen(card) {
 	return true;
     }
     return false;
-}
-
-function select(event) {
-    console.log('select');
-    console.log(selected);
-    if (noCardChosen(selected)) {
-	return;
-    }
-    $('#select').hide();
-    socket.emit('select', {
-	desc: selected
-    });
-    event.preventDefault();
 }
 
 function initPlayer(data) {
@@ -174,9 +169,9 @@ function admin(newAdminIdx) {
 }
 
 function round(data) {
-    $('#announcement').html("<h1>Next round in five secs...</h1>");
+    $('#announcement').html("<h1>Next round in five...</h1>");
     $('#announcement').show();
-    $('#announcement').fadeOut(5000, function() {
+    $('#announcement').hide(5000, function() {
 	$('#blackcard').show();
 	$('#infowrap').show();
 	$('#hand').show();
@@ -226,7 +221,6 @@ function resetScores() {
 }
 
 function score(data) {
-    console.log("updating score for " + data.playerIdx + " with " + data.score);
     if ('score' in data && 'playerIdx' in data) {
 	var player = $('#p' + data.playerIdx);
 	player.children('h2').text(data.score);
@@ -239,10 +233,6 @@ function score(data) {
 		break;
 	    }
 	}
-	console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-	console.log(cardIdx);
-	console.log(submittedCards);
-	console.log(submittedElem);
 	submittedElem[cardIdx].addClass('selected');
     }
 }
