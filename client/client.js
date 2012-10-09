@@ -59,14 +59,9 @@ function start(event) {
 }
 
 function submit(event) {
-    // How do I decide which card is being submitted?
     console.log('submitting');
     console.log(submission);
-    if (null === submission) {
-	$('#announcement').html("<h1>You need to select a card.</h1>");
-	$('#announcement').fadeIn(10, function() {
-	    $('#announcement').fadeOut(3000);
-	});
+    if (noCardChosen(submission)) {
 	return;
     }
     $('#submit').hide();
@@ -76,14 +71,21 @@ function submit(event) {
     event.preventDefault();
 }
 
-function select(event) {
-    console.log('select');
-    console.log(selected);
-    if (selected === null) {
+function noCardChosen(card) {
+    if (null === card) {
 	$('#announcement').html("<h1>You need to select a card.</h1>");
 	$('#announcement').fadeIn(10, function() {
 	    $('#announcement').fadeOut(3000);
 	});
+	return true;
+    }
+    return false;
+}
+
+function select(event) {
+    console.log('select');
+    console.log(selected);
+    if (noCardChosen(selected)) {
 	return;
     }
     $('#select').hide();
@@ -93,9 +95,6 @@ function select(event) {
     event.preventDefault();
 }
 
-// Initializes the player's view with information. 
-// Data is comprised of myIdx and players.
-// We then display the player's and their scores in the view.
 function initPlayer(data) {
     if ('myIdx' in data) {
 	myIdx = data.myIdx;
@@ -175,27 +174,29 @@ function admin(newAdminIdx) {
 }
 
 function round(data) {
-    $('#announcement').fadeOut(500, function() {
+    $('#announcement').html("<h1>Next round in five secs...</h1>");
+    $('#announcement').show();
+    $('#announcement').fadeOut(5000, function() {
 	$('#blackcard').show();
 	$('#infowrap').show();
 	$('#hand').show();
 	$('#submitted').show();
-    });
-    $('#submitted').children('.cards').empty();
-    if ('tzarIdx' in data) {
-	tzarIdx = data.tzarIdx;
-	handleTzar();
-    }
-    if ('blacks' in data) {
-	if (data.blacks <= 0) {
-	    $('#blacks').html("<h2>Last round!</h2>");
-	} else {
-	    $('#blacks').html("<h2>Black Cards Remaining: " + data.blacks + "</h2>");
+	$('#submitted').children('.cards').empty();
+	if ('tzarIdx' in data) {
+	    tzarIdx = data.tzarIdx;
+	    handleTzar();
 	}
-    }
-    if ('desc' in data) {
-	$('#blackcard').children('.cardText').html(data.desc);
-    }
+	if ('blacks' in data) {
+	    if (data.blacks <= 0) {
+		$('#blacks').html("<h2>Last round!</h2>");
+	    } else {
+		$('#blacks').html("<h2>Black Cards Remaining: " + data.blacks + "</h2>");
+	    }
+	}
+	if ('desc' in data) {
+	    $('#blackcard').children('.cardText').html(data.desc);
+	}
+    });
 }
 
 function handleTzar() {
@@ -229,6 +230,17 @@ function score(data) {
     if ('score' in data && 'playerIdx' in data) {
 	var player = $('#p' + data.playerIdx);
 	player.children('h2').text(data.score);
+    }
+    if ('card' in data) {
+	var cardIdx;
+	for (var i = 0; i < submittedCards.length; i++) {
+	    if (submittedCards[i] !== data.card) {
+		continue;
+	    }
+	    cardIdx = i;
+	    break;
+	}
+	submittedElem[cardIdx].addClass('selected');
     }
 }
 

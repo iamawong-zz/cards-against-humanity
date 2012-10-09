@@ -242,7 +242,7 @@ Game.prototype.initialize = function(playerIdx) {
 }
 
 Game.prototype.select = function(playerIdx, card) {
-    console.log("player " + playerIdx + " selected card " + card);
+    console.log("player " + playerIdx + " selected card " + card.desc);
     var winnerIdx;
     for (var i = 0; i < this.submittedWhites.length; i++) {
 	var whiteCard = this.submittedWhites[i];
@@ -254,6 +254,7 @@ Game.prototype.select = function(playerIdx, card) {
     var winner = this.players[winnerIdx];
     winner.score += 1;
     this.broadcast('score', {
+	card: card.desc,
 	score: winner.score,
 	playerIdx: winnerIdx
     });
