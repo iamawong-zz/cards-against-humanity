@@ -30,7 +30,6 @@ html, body {
 }
 body {
     background: #cecece;
-    padding-top: 40px;
 }
 body {
     font: 13px/19px 'DroidSansRegular', sans-serif !important;}
@@ -72,12 +71,6 @@ a, a:visited, a:link, a:hover {
 .button:hover {
     background: #eee;
 }
-.cahlogo {
-    font-size: 10px;
-    padding: 0px 0px 15px 15px;
-    position: relative;
-    top: 90px;
-}
 .cardText {
     font: 'Tahoma';
     font-weight: bold;
@@ -93,10 +86,6 @@ a, a:visited, a:link, a:hover {
     font-size: 12px;
     padding: 10px 10px 0px 10px;
     line-height: 20px;
-}
-.logo {
-    font-size: 10px;
-    padding: 0px 0px 15px 15px;
 }
 .whitecard {
     border: 2px solid #000;
@@ -191,9 +180,8 @@ a, a:visited, a:link, a:hover {
     margin: 0 0 30px 30px;
 }
 #header {
-    position: fixed;
     width: 100%;
-    top: 20px;
+    margin-top: 20px;
     height: 40px;
 }
 #blacks {
@@ -273,7 +261,7 @@ a, a:visited, a:link, a:hover {
     margin: 0px 0px 10px 0px;
 }
 #wrap {
-    margin: 20px auto 0 auto;
+    margin: 0 auto 0 auto;
     position: relative;
     width: 990px;
 }
