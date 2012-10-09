@@ -52,7 +52,6 @@ function initializeGame() {
 
 function start(event) {
     console.log('starting game');
-    resetScores();
     gameStarted = true;
     $('#start').hide(500);    
     socket.emit('start');
