@@ -78,14 +78,14 @@ a, a:visited, a:link, a:hover {
 .black {
     color: #fff;
     font-size: 18px;
-    padding: 15px 15px 0px 15px;
-    line-height: 30px;
+    padding: 10px 15px 0px 15px;
+    line-height: 25px;
 }
 .white {
     color: #000;
     font-size: 12px;
-    padding: 10px 10px 0px 10px;
-    line-height: 20px;
+    padding: 5px 10px 0px 10px;
+    line-height: 15px;
 }
 .whitecard {
     border: 2px solid #000;
@@ -102,7 +102,7 @@ a, a:visited, a:link, a:hover {
 .whitecard:hover {
     box-shadow:0px 0px 30px gray; /*CSS3 shadow: 30px blurred shadow all around image*/
     z-index: 1;
-    -webkit-transform:scale(1.5); /*Webkit: Scale up image to 1.2x original size*/
+    -webkit-transform:scale(1.5); /*Webkit: Scale up image to 1.5x original size*/
     -moz-transform:scale(1.5); /*Mozilla scale version*/
     -o-transform:scale(1.5); /*Opera scale version*/
     -webkit-box-shadow:0px 0px 30px gray; /*Safari shadow version*/
@@ -175,10 +175,6 @@ a, a:visited, a:link, a:hover {
     height: 192px;
     float: left;
 }
-#content {
-    width: 215px;
-    margin: 0 0 30px 30px;
-}
 #header {
     width: 100%;
     margin-top: 20px;
@@ -241,6 +237,7 @@ a, a:visited, a:link, a:hover {
 }
 #scoreboard li h2 {
     float: right; 
+    width: 5px;
     text-shadow: 0px 2px 3px #555;
 }
 #start, #submit, #select {
@@ -264,6 +261,10 @@ a, a:visited, a:link, a:hover {
     margin: 0 auto 0 auto;
     position: relative;
     width: 990px;
+}
+#content {
+    width: 215px;
+    margin: 0 0 30px 30px;
 }
 #wrap #content {
     margin-left: 270px;
