@@ -234,11 +234,10 @@ function score(data) {
     if ('card' in data) {
 	var cardIdx;
 	for (var i = 0; i < submittedCards.length; i++) {
-	    if (submittedCards.desc !== data.card) {
-		continue;
+	    if (submittedCards[i].desc === data.card) {
+		cardIdx = i;
+		break;
 	    }
-	    cardIdx = i;
-	    break;
 	}
 	console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 	console.log(cardIdx);
