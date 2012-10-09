@@ -247,13 +247,13 @@ a, a:visited, a:link, a:hover {
 #hand {
     display: none;
     width: 200%;
-    margin-top: 15px;
+    height: 330px;
+    margin-top: 210px;
 }
 #submitted {
     display: none;
     width: 200%;
-    height: 330px;
-    margin-top: 210px;
+    margin-top: 15px;
 }
 #hand h2, #submitted h2 {
     margin: 0px 0px 10px 0px;
