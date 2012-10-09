@@ -240,6 +240,10 @@ function score(data) {
 	    cardIdx = i;
 	    break;
 	}
+	console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+	console.log(cardIdx);
+	console.log(submittedCards);
+	console.log(submittedElem);
 	submittedElem[cardIdx].addClass('selected');
     }
 }
