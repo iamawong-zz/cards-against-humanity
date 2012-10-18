@@ -16,4 +16,4 @@ Run on prod:
 
        
 
-[1]: http://http://cardsagainsthumanity.com/
+[1]: http://cardsagainsthumanity.com/

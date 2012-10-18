@@ -143,6 +143,13 @@ a, a:visited, a:link, a:hover {
     opacity: .70;
     z-index: 4;
 }
+.message {
+  padding: 5px 10px;
+  background: #fff;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+}
 .tzar {
     display: none;
     color: white;
