@@ -241,11 +241,12 @@ Game.prototype.initialize = function(playerIdx) {
 	blacks: this.blackDeck.length,
 	desc: this.black.desc,
 	hand: this.players[playerIdx].hand,
+	myIdx: playerIdx,
+	msgs: this.messages,
+	players: this.getPlayerData(),
 	remaining: 3 - this.getNumPlayers(),
 	started: this.started,
-	tzarIdx: this.tzarIdx,
-	players: this.getPlayerData(),
-	myIdx: playerIdx
+	tzarIdx: this.tzarIdx
     });
     if (this.started) {
 	this.submitBroadcast();
@@ -253,8 +254,6 @@ Game.prototype.initialize = function(playerIdx) {
 }
 
 Game.prototype.chat = function(playerIdx, msg) {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log(msg);
     if (msg.length > 1024) return;
     msg = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br/>');
     return this.sendMsg({ player: playerIdx, msg: msg });
@@ -262,7 +261,7 @@ Game.prototype.chat = function(playerIdx, msg) {
 
 Game.prototype.sendMsg = function(msg) {
     this.messages.push(msg);
-    if (this.messages.length > 15) this.messages.shift();
+    if (this.messages.length > 4) this.messages.shift();
     this.broadcast('msg', msg);
 }
 

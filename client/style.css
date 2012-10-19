@@ -149,6 +149,9 @@ a, a:visited, a:link, a:hover {
     opacity: .70;
     z-index: 4;
 }
+.playermessage {
+    margin-left: 95px;
+}
 .message {
   padding: 10px 10px;
   background: #fff;
@@ -184,7 +187,7 @@ a, a:visited, a:link, a:hover {
     margin-bottom: 10px;
 }
 #blackcard {
-    display: none;
+    visibility: hidden;
     border: 2px solid #fff;
     background: #000;
     width: 192px;
@@ -226,8 +229,13 @@ a, a:visited, a:link, a:hover {
 }
 #chatwrap {
     width: 34%;
-    margin-left: 200px;
+    margin-left: 5px;
+    float: left;
     display: none;
+}
+#chatwrap h3 {
+    float: left;
+    margin-top: 10px;
 }
 #share { 
     margin-bottom: 10px;
@@ -282,7 +290,7 @@ a, a:visited, a:link, a:hover {
 #submitted {
     display: none;
     height: 330px;
-    margin-top: 145px;
+    margin-top: 45px;
 }
 #hand h2, #submitted h2 {
     margin: 10px 0px 10px 0px;

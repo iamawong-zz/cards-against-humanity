@@ -62,22 +62,20 @@ function input(e) {
     var self = this;
     if (e.which === 13) {
 	if (!e.ctrlKey) {
-	    socket.emit('chat', this.value);
+	    if (this.value) {
+		socket.emit('chat', this.value);
+	    }
 	    this.value = "";
 	} else {
 	    this.value += "\n";
 	}
 	e.preventDefault();
     }
-    setTimeout(function() {
-	if (self.value) $(self).prev().fadeOut('fast');
-	else $(self).prev().fadeIn('fast');
-    }, 15);
 }
 
 function msg(obj) {
     var skipPlayer = obj.event !== undefined;
-    if (lastMsg && !obj.event && obj.player === lastMsg.player) {
+    if (obj.event !== undefined && obj.event) {
 	skipPlayer = true;
     }
     var m = $('<li>' +
@@ -85,14 +83,15 @@ function msg(obj) {
 	       '' :
 	       '<h3 class="p' + obj.player +
 	       '">Player ' +(obj.player+1) + '</h3>') +
-	      '<div class="message cornered ' + (obj.event ? '' : 'player-message') + '">' +
+	      '<div class="message rounded ' + (obj.event ? '' : 'playermessage') + '">' +
 	      obj.msg + '</div></li>'
 	     );
     lastMsg = {player: obj.player, event: obj.event};
+    var chat = $('#chatwrap');
+    if ($('#chatwrap li').size() > 4) {
+	$('#chatwrap li:first').remove();
+    }
     $('#chatwrap').append(m);
-    
-    $('html, body').stop();
-    $('html, body').animate({ scrollTop: $(document).height() }, 200);
 }
 
 function start(event) {
@@ -150,6 +149,9 @@ function initPlayer(data) {
     }
     if (!gameStarted && 'remaining' in data) {
 	remaining(data.remaining);
+    }
+    if ('msgs' in data) {
+	data.msgs.forEach(msg);
     }
     if ('adminIdx' in data) {
 	admin(data.adminIdx);
@@ -226,7 +228,7 @@ function round(data, dontEmpty) {
     roundTimer(5);
     gameStarted = true;
     setTimeout(function() {
-	$('#blackcard').fadeIn();
+	$('#blackcard').css({"visibility": "visible"});
 	$('#hand').fadeIn();
 	$('#submitted').fadeIn();
 	if (!dontEmpty) {
@@ -305,8 +307,6 @@ function score(data) {
     }
 }
 
-// Inside data is the playerIdx and the white cards that this playerIdx will hold.
-// Update the visuals with the cards.
 function newHand(data) {
     if ('playerIdx' in data && 'hand' in data && data.playerIdx === myIdx) {
 	updateAndDisplayHand(data.hand);
@@ -315,7 +315,7 @@ function newHand(data) {
 
 function gameover() {
     gameStarted = false;
-    $('#blackcard').fadeOut();
+    $('#blackcard').css({"visbility": "hidden"});
     $('#hand').fadeOut();
     $('#submitted').fadeOut();
     $('#announcement').html("<h1>Game over!</h1>Player " + (adminIdx+1) + " can hit start to play again");
