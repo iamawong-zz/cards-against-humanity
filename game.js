@@ -46,6 +46,8 @@ Game.prototype.registerPlayer = function(socket, session) {
     var playerIndex = this.firstFreePlayerSlot();
     this.broadcast('join', playerIndex);
     this.players[playerIndex] = new Player(socket, session);
+
+    this.sendMsg({event: true, msg: 'Player ' + (playerIndex + 1) + ' has joined.'});
     this.updateAdmin();
     this.updatePlayersNeeded();
 }
@@ -57,6 +59,7 @@ Game.prototype.unregisterPlayer = function(socket, gameDone) {
     var player = this.players[playerIndex];
     player.online = false;
     this.broadcast('leave', playerIndex);
+    this.sendMsg({event: true, msg: 'Player ' + (playerIndex + 1) + ' has disconnected.'});
     this.updateAdmin();
     this.updatePlayersNeeded();
     var self = this;
@@ -132,7 +135,7 @@ Game.prototype.playerRejoined = function(socket, session) {
 	if (player.socket.id === socket.id || player.session === session) {
 	    if (!player.online) {
 		this.broadcast('rejoin', i);
-		// send message?
+		this.sendMsg({event: true, msg: 'Player ' + (i + 1) + ' has reconnected.'});
 	    }
 	    player.online = true;
 	    player.socket = socket;
@@ -173,12 +176,9 @@ Game.prototype.fixPlayerHand = function(playerIdx) {
 	tempHand.push(this.getWhiteCard());
     }
     player.hand = tempHand;
-    var info = {
-	hand: tempHand,
-	playerIdx : playerIdx,
-	whites: this.whiteDeck.length
-    };
-    this.broadcast('newHand', info);
+    player.socket.emit('newHand', {
+	hand: tempHand
+    });
 }
 
 Game.prototype.getWhiteCard = function() {

@@ -308,7 +308,7 @@ function score(data) {
 }
 
 function newHand(data) {
-    if ('playerIdx' in data && 'hand' in data && data.playerIdx === myIdx) {
+    if ('hand' in data) {
 	updateAndDisplayHand(data.hand);
     }
 }
