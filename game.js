@@ -5,6 +5,9 @@ var Game = function(socket, hash) {
     this.players = [null, null, null, null, null, null, null, null, null, null];
     this.hash = hash;
     this.gameAdminIdx = 0;
+    this.blackDeck = [];
+    this.whiteDeck = [];
+    this.black = "";
 
     this.started = false;
 }
@@ -155,9 +158,8 @@ Game.prototype.updateAdmin = function() {
 }
 
 Game.prototype.updatePlayersNeeded = function() {
-    var numPlayers = this.getNumPlayers();
     if (!this.started) {
-	this.broadcast('remaining', 3 - numPlayers);
+	this.broadcast('remaining', 3 - this.getNumPlayers());
     }
 }
 
@@ -200,12 +202,12 @@ Game.prototype.nextRound = function() {
     } while (!this.isActivePlayer(tzar));
     this.broadcast('tzar', this.tzarIdx);
 
-    var black = this.blackDeck.shift();
+    this.black = this.blackDeck.shift();
     
     this.broadcast('round', {
-	action: black.action,
+	action: this.black.action,
 	blacks: this.blackDeck.length, 
-	desc: black.desc,
+	desc: this.black.desc,
 	tzarIdx: this.tzarIdx
     });
 }
@@ -235,10 +237,18 @@ Game.prototype.handleClientMessage = function(event, socket) {
 Game.prototype.initialize = function(playerIdx) {
     this.players[playerIdx].socket.emit('initPlayer', {
 	adminIdx: this.gameAdminIdx,
+	blacks: this.blackDeck.length,
+	desc: this.black.desc,
+	hand: this.players[playerIdx].hand,
 	remaining: 3 - this.getNumPlayers(),
+	started: this.started,
+	tzarIdx: this.tzarIdx,
 	players: this.getPlayerData(),
 	myIdx: playerIdx
     });
+    if (this.started) {
+	this.submitBroadcast();
+    }
 }
 
 Game.prototype.select = function(playerIdx, card) {
@@ -268,18 +278,23 @@ Game.prototype.submit = function(playerIdx, card) {
 	if (null !== handCard && handCard.desc === card.desc) {
 	    handCard.playerIdx = playerIdx;
 	    this.submittedWhites.push(handCard);
-	    this.broadcast('submitted', this.submittedWhites.length);
 	    player.hand[i] = null;
 	    break;
 	}
     }
+    this.submitBroadcast();
+    this.fixPlayerHand(playerIdx);
+}
+
+Game.prototype.submitBroadcast = function() {
     if (this.submittedWhites.length === (this.getNumPlayers()-1)) {
 	shuffle(this.submittedWhites);
 	this.broadcast('allsubmitted', {
 	    submitted: this.submittedWhites
 	});
+    } else {
+	this.broadcast('submitted', this.submittedWhites.length);
     }
-    this.fixPlayerHand(playerIdx);
 }
 
 Game.prototype.start = function() {

@@ -91,6 +91,19 @@ function initPlayer(data) {
     if ('myIdx' in data) {
 	myIdx = data.myIdx;
     }
+    if ('tzarIdx' in data) {
+	tzarIdx = data.tzarIdx;
+    }
+    if ('started' in data) {
+	gameStarted = data.started;
+    }
+    if (gameStarted) {
+	if ('hand' in data) {
+	    updateAndDisplayHand(data.hand);
+	}
+	handleStartButton();
+	round(data, true);
+    }
     if ('adminIdx' in data) {
 	admin(data.adminIdx);
     }
@@ -164,13 +177,16 @@ function admin(newAdminIdx) {
     handleStartButton();
 }
 
-function round(data) {
+function round(data, dontEmpty) {
     $('#announcement').html("<h1>Next round in five...</h1>");
+    gameStarted = true;
     setTimeout(function() {
 	$('#blackcard').fadeIn();
 	$('#hand').fadeIn();
 	$('#submitted').fadeIn();
-	$('#submitted').children('.cards').empty();
+	if (!dontEmpty) {
+	    $('#submitted').children('.cards').empty();
+	}
 	if ('tzarIdx' in data) {
 	    tzarIdx = data.tzarIdx;
 	    handleTzar();

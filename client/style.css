@@ -144,11 +144,16 @@ a, a:visited, a:link, a:hover {
     z-index: 4;
 }
 .message {
-  padding: 5px 10px;
+  padding: 10px 10px;
   background: #fff;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
   -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+}
+.rounded {
+  -moz-border-radius: 0 10px 0 10px;
+  -webkit-border-radius: 0 10px 0 10px;
+  border-radius: 0 10px 0 10px;
 }
 .tzar {
     display: none;
