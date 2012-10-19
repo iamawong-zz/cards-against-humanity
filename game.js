@@ -1,10 +1,11 @@
-var CLIENT_EVENTS = ['init', 'select', 'submit', 'start'];
+var CLIENT_EVENTS = ['init', 'chat', 'select', 'submit', 'start'];
 
 var Game = function(socket, hash) {
     this.socket = socket;
     this.players = [null, null, null, null, null, null, null, null, null, null];
     this.hash = hash;
     this.gameAdminIdx = 0;
+    this.messages = [];
     this.blackDeck = [];
     this.whiteDeck = [];
     this.black = "";
@@ -249,6 +250,20 @@ Game.prototype.initialize = function(playerIdx) {
     if (this.started) {
 	this.submitBroadcast();
     }
+}
+
+Game.prototype.chat = function(playerIdx, msg) {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    console.log(msg);
+    if (msg.length > 1024) return;
+    msg = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br/>');
+    return this.sendMsg({ player: playerIdx, msg: msg });
+}
+
+Game.prototype.sendMsg = function(msg) {
+    this.messages.push(msg);
+    if (this.messages.length > 15) this.messages.shift();
+    this.broadcast('msg', msg);
 }
 
 Game.prototype.select = function(playerIdx, card) {

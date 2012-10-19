@@ -2,8 +2,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="description" content="Hilarious realtime card game
-online with your friends"/>
+    <meta name="description" content="Hilarious realtime card game online with your friends"/>
     <title>Cards Against Humanity - realtime online card game</title>
     <link rel="stylesheet" href="/style.css"/>
   </head>
@@ -22,10 +21,23 @@ online with your friends"/>
 	<div id="blackcard">
 	  <div class="cardText black"></div>
 	</div>
-	<div id="share" class="message rounded">
-	  Share this URL to invite others to the game:
-	  <input type="text"></input>
-	</div>
+	<ul id="chatwrap">
+	  <li class="message rounded">Chat in real time as you play</li>
+	</ul>
+	<ul id="sharewrap">
+	  <li>
+	  <div id="share" class="message rounded">
+	    Share this URL to invite others to the game:
+	    <input type="text"></input>
+	  </div>
+	  </li>
+	  <li>
+	  <div id="chattext" class="message">
+	    <label for="input">Type here to chat</label>
+	    <textarea wrap="hard" autocomplete="off" spellcheck="false" id="input"></textarea>
+	  </div>
+	  </li>
+	</ul>
 	<div id="submitted">
 	  <h2>Submitted Cards</h2>
 	  <a id='select' class='button'>Select a winner</a>

@@ -12,7 +12,7 @@ var socket
 , submittedCards
 , submittedElem = []
 , selected
-, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white', 'submitted', 'allsubmitted', 'gameover'];
+, SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white', 'submitted', 'allsubmitted', 'gameover', 'msg'];
 
 // This will be the main function that will be called after loading client.js. 
 // Needs to create the socket connection via Socket.io.
@@ -31,14 +31,16 @@ function startGame() {
 	socket.on(event, window[event]);
     });
 
-    $('#start').click(start);
-    $('#submit').click(submit);
-    $('#select').click(select);
+    $('#input').focus();
+    $('#input').keydown(input);
     $('#share').bind('mouseup', function(event) {
 	$('#share input')[0].select();
 	event.stopImmediatePropagation();
 	return false;
     });
+    $('#start').click(start);
+    $('#submit').click(submit);
+    $('#select').click(select);
 }
 
 function initializeGame() {
@@ -53,6 +55,44 @@ function initializeGame() {
 	$('#share input').attr('value', window.location.href);
     }
     socket.emit('initialize', msg);
+}
+
+function input(e) {
+    e = e || event;
+    var self = this;
+    if (e.which === 13) {
+	if (!e.ctrlKey) {
+	    socket.emit('chat', this.value);
+	    this.value = "";
+	} else {
+	    this.value += "\n";
+	}
+	e.preventDefault();
+    }
+    setTimeout(function() {
+	if (self.value) $(self).prev().fadeOut('fast');
+	else $(self).prev().fadeIn('fast');
+    }, 15);
+}
+
+function msg(obj) {
+    var skipPlayer = obj.event !== undefined;
+    if (lastMsg && !obj.event && obj.player === lastMsg.player) {
+	skipPlayer = true;
+    }
+    var m = $('<li>' +
+	      (skipPlayer ?
+	       '' :
+	       '<h3 class="p' + obj.player +
+	       '">Player ' +(obj.player+1) + '</h3>') +
+	      '<div class="message cornered ' + (obj.event ? '' : 'player-message') + '">' +
+	      obj.msg + '</div></li>'
+	     );
+    lastMsg = {player: obj.player, event: obj.event};
+    $('#chatwrap').append(m);
+    
+    $('html, body').stop();
+    $('html, body').animate({ scrollTop: $(document).height() }, 200);
 }
 
 function start(event) {
@@ -117,7 +157,7 @@ function initPlayer(data) {
     if ('players' in data) {
 	updatePlayers(data.players);
     }
-    $('#share').css({display:'block'});
+    $('#sharewrap, #chatwrap').css({display:'block'});
 }
 
 function updatePlayers(players) {

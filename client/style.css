@@ -31,7 +31,7 @@ html, body {
 body {
     background: #cecece;
 }
-body {
+body, textarea {
     font: 13px/19px 'DroidSansRegular', sans-serif !important;}
 }
 h1, h2, h3 {
@@ -218,14 +218,32 @@ a, a:visited, a:link, a:hover {
 #menu {
     width: 260px;
 }
-#share { 
-    display: none;
+#sharewrap {
     width: 38%;
+    position: relative;
+    margin-left:480px;
+    display: none;
+}
+#chatwrap {
+    width: 34%;
     margin-left: 200px;
+    display: none;
+}
+#share { 
+    margin-bottom: 10px;
 }
 #share input {
     width: 80%;
     margin: 5px 0;
+}
+#input {
+    width: 100%;
+    overflow: hidden;
+    outline: 0;
+    padding: 5px 0px 5px 5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 #scoreboard {
     width: 150px;
@@ -264,7 +282,7 @@ a, a:visited, a:link, a:hover {
 #submitted {
     display: none;
     height: 330px;
-    margin-top: 220px;
+    margin-top: 145px;
 }
 #hand h2, #submitted h2 {
     margin: 10px 0px 10px 0px;
