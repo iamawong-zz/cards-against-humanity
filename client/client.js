@@ -88,14 +88,12 @@ function noCardChosen(card) {
 }
 
 function initPlayer(data) {
+    gameStarted = data.started;
     if ('myIdx' in data) {
 	myIdx = data.myIdx;
     }
     if ('tzarIdx' in data) {
 	tzarIdx = data.tzarIdx;
-    }
-    if ('started' in data) {
-	gameStarted = data.started;
     }
     if (gameStarted) {
 	if ('hand' in data) {
@@ -104,14 +102,14 @@ function initPlayer(data) {
 	handleStartButton();
 	round(data, true);
     }
+    if (!gameStarted && 'remaining' in data) {
+	remaining(data.remaining);
+    }
     if ('adminIdx' in data) {
 	admin(data.adminIdx);
     }
     if ('players' in data) {
 	updatePlayers(data.players);
-    }
-    if ('remaining' in data) {
-	remaining(data.remaining);
     }
 }
 
@@ -178,7 +176,7 @@ function admin(newAdminIdx) {
 }
 
 function round(data, dontEmpty) {
-    $('#announcement').html("<h1>Next round in five...</h1>");
+    roundTimer(5);
     gameStarted = true;
     setTimeout(function() {
 	$('#blackcard').fadeIn();
@@ -198,7 +196,17 @@ function round(data, dontEmpty) {
 	    $('#blackcard').children('.cardText').html(data.desc);
 	}
     }, 5000);
-    defaultAnnouncement(5000);
+}
+
+function roundTimer(seconds) {
+    $('#announcement').html("<h1>Round loading in " + seconds + "...</h1>");
+    if (seconds > 0) {
+	setTimeout(function () {
+	    roundTimer(seconds-1);
+	}, 1000);
+    } else {
+	defaultAnnouncement(0);
+    }
 }
 
 function handleTzar() {
@@ -246,7 +254,7 @@ function score(data) {
 		break;
 	    }
 	}
-	submittedElem[cardIdx].addClass('selected');
+	submittedElem[cardIdx].addClass('won');
     }
 }
 
@@ -289,7 +297,6 @@ function updateAndDisplayHand(newHand) {
     submission = null;
     var handCardArea = $('#hand').children('.cards');
     handCardArea.empty()
-    /*$('#hand').html("<h2>Your hand</h2><a id='submit' class='button'>Play a card</a><div class='tzar'>YOU'RE TZAR</div>");*/
     
     $.each(newHand, function(idx, card) {
 	var c = $('<div/>', {

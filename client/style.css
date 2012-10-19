@@ -111,6 +111,9 @@ a, a:visited, a:link, a:hover {
 .selected {
     border: 2px solid red;
 }
+.won {
+    border: 2px solid blue;
+}
 .offline {
     display: none;
     color: white;
