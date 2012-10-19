@@ -49,6 +49,9 @@ h2 {
 h3 {
     font-size: 22px;
 }
+h4 {
+    font-size: 20px;
+}
 a, a:visited, a:link, a:hover {
     color: #333;
     text-decoration: none;
@@ -160,15 +163,12 @@ a, a:visited, a:link, a:hover {
 }
 .tzar {
     display: none;
-    color: white;
-    font-size: 10px;
     position: absolute;
     text-align: left;
     padding-top: 23px;
     left: 0;
     width: 200px;
     height: 40px;
-    z-index: 4;
 }
 .p0 {color: #771536} 
 .p1 {color: #0E4647} 
@@ -202,8 +202,8 @@ a, a:visited, a:link, a:hover {
     margin: 0 auto;
     text-align: left;
 }
-#header h1 span.grey {
-    color:#999;
+.grey {
+    color: #999;
 }
 #fixedwrap {
     position: fixed;
@@ -217,6 +217,15 @@ a, a:visited, a:link, a:hover {
 }
 #menu {
     width: 260px;
+}
+#share { 
+    display: none;
+    width: 38%;
+    margin-left: 200px;
+}
+#share input {
+    width: 80%;
+    margin: 5px 0;
 }
 #scoreboard {
     width: 150px;
@@ -250,12 +259,10 @@ a, a:visited, a:link, a:hover {
 }
 #hand {
     display: none;
-    width: 200%;
     margin-top: 15px;
 }
 #submitted {
     display: none;
-    width: 200%;
     height: 330px;
     margin-top: 220px;
 }
@@ -274,7 +281,7 @@ a, a:visited, a:link, a:hover {
 #wrap #content {
     margin-left: 270px;
     padding-bottom: 25px;
-    width: 400px;
+    width: 800px;
     float: left;
     position: relative;
     z-index: 2;

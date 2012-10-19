@@ -34,6 +34,11 @@ function startGame() {
     $('#start').click(start);
     $('#submit').click(submit);
     $('#select').click(select);
+    $('#share').bind('mouseup', function(event) {
+	$('#share input')[0].select();
+	event.stopImmediatePropagation();
+	return false;
+    });
 }
 
 function initializeGame() {
@@ -45,6 +50,7 @@ function initializeGame() {
     if (hash) {
 	hash = hash.substring(hash.indexOf('#!/') + 3);
 	msg.hash = hash;
+	$('#share input').attr('value', window.location.href);
     }
     socket.emit('initialize', msg);
 }
@@ -111,6 +117,7 @@ function initPlayer(data) {
     if ('players' in data) {
 	updatePlayers(data.players);
     }
+    $('#share').css({display:'block'});
 }
 
 function updatePlayers(players) {
@@ -155,7 +162,7 @@ function rejoin(playerIdx) {
 // that textbox with the right url.
 function gameHash(hash) {
     window.location.replace(window.location.href.split('#')[0] + '#!/' + hash);
-    console.log("Here is the hash. " + hash);
+    $('#share input').attr('value', window.location.href);
 }
 
 // This is a function to update the number of remaining players needed to start a game.
