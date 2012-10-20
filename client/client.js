@@ -14,8 +14,6 @@ var socket
 , selected
 , SERVER_EVENTS = ['initPlayer', 'join', 'leave', 'rejoin', 'gameHash', 'remaining', 'admin', 'score', 'newHand', 'round', 'white', 'submitted', 'allsubmitted', 'gameover', 'msg'];
 
-// This will be the main function that will be called after loading client.js. 
-// Needs to create the socket connection via Socket.io.
 function startGame() {
     socket = io.connect();
 
@@ -147,9 +145,6 @@ function initPlayer(data) {
     if (!gameStarted && 'remaining' in data) {
 	remaining(data.remaining);
     }
-    if ('msgs' in data) {
-	data.msgs.forEach(msg);
-    }
     if ('adminIdx' in data) {
 	admin(data.adminIdx);
     }
@@ -157,6 +152,9 @@ function initPlayer(data) {
 	updatePlayers(data.players);
     }
     $('#sharewrap, #chatwrap').css({display:'block'});
+    if ('msgs' in data) {
+	data.msgs.forEach(msg);
+    }
 }
 
 function updatePlayers(players) {
@@ -194,17 +192,11 @@ function rejoin(playerIdx) {
     updatePlayers(players);
 }
 
-// This is the hash of the game.
-// For example, the url to a game will be www.cah.com/game/#!/123AB and 123AB will be the hash of the game.
-// We'll have to update the url address with this hash.
-// We also will have a text box somewhere that says 'share this url to invite' and we'll have to update
-// that textbox with the right url.
 function gameHash(hash) {
     window.location.replace(window.location.href.split('#')[0] + '#!/' + hash);
     $('#share input').attr('value', window.location.href);
 }
 
-// This is a function to update the number of remaining players needed to start a game.
 function remaining(num) {
     playersRequired = num;
     if (playersRequired > 0) {
@@ -215,7 +207,6 @@ function remaining(num) {
     handleStartButton();
 }
 
-// Visual update of who the new admin is.
 function admin(newAdminIdx) {
     adminIdx = newAdminIdx;
     handleStartButton();
