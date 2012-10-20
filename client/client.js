@@ -267,7 +267,7 @@ function handleTzar() {
 
 function defaultAnnouncement(time) {
     setTimeout(function() {
-	$('#announcement').html("<h2>Black Cards Left: " + blacksRemaining + " </h2>");
+	$('#announcement').html('<h1>Black Cards Left: ' + blacksRemaining + ' </h1>');
     }, time);
 }
 
