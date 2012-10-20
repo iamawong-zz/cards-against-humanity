@@ -87,11 +87,8 @@ function msg(obj) {
 	      obj.msg + '</div></li>'
 	     );
     lastMsg = {player: obj.player, event: obj.event};
-    var chat = $('#chatwrap');
-    if ($('#chatwrap li').size() > 4) {
-	$('#chatwrap li:first').remove();
-    }
     $('#chatwrap').append(m);
+    $("#chatwrap").animate({scrollTop:$("#chatwrap")[0].scrollHeight});
 }
 
 function start(event) {

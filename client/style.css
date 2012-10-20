@@ -74,9 +74,21 @@ a, a:visited, a:link, a:hover {
 .button:hover {
     background: #eee;
 }
+.game {
+    float: left;
+    height: auto;
+    margin: 0 0 0 15px;
+    padding: 10px 5px;
+}
+.select {
+    width: 100px;
+}
+.submit {
+    width: 150px;
+}
 .cards { 
-    width: 100%;
-    height: 300px;
+    width: 680px;
+    height: 270px;
     float: left;
 }
 .cardText {
@@ -99,8 +111,8 @@ a, a:visited, a:link, a:hover {
     border: 2px solid #000;
     background: #fff;
     float: left;
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
     margin: 5px 8px 5px 0px; /*margin between images*/
     z-index: -1;
 }
@@ -136,11 +148,11 @@ a, a:visited, a:link, a:hover {
     color: white;
     background: #333;
     text-align: center;
-    margin-top: 44px;
-    padding-top: 10px;
-    line-height: 1em;
-    width: 752px;
-    height: 288px;
+    margin-top: 48px;
+    padding-top: 9px;
+    line-height: .9em;
+    width: 652px;
+    height: 249px;
     font-size: 140px;
     -moz-opacity: .70;
     filter:apha(opacity=70);
@@ -220,14 +232,16 @@ a, a:visited, a:link, a:hover {
     width: 260px;
 }
 #sharewrap {
-    width: 38%;
-    position: relative;
-    margin-left:480px;
+    float: left;
+    width: 36%;
+    margin-left:5px;
     display: none;
 }
 #chatwrap {
-    width: 34%;
+    width: 38%;
+    height: 170px;
     margin-left: 5px;
+    overflow: auto;
     float: left;
     display: none;
 }
@@ -287,8 +301,8 @@ a, a:visited, a:link, a:hover {
 }
 #submitted {
     display: none;
-    height: 330px;
-    margin-top: 45px;
+    height: 290px;
+    margin-top: 210px;
 }
 #hand h2, #submitted h2 {
     margin: 10px 0px 10px 0px;

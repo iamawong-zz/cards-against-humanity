@@ -261,7 +261,7 @@ Game.prototype.chat = function(playerIdx, msg) {
 
 Game.prototype.sendMsg = function(msg) {
     this.messages.push(msg);
-    if (this.messages.length > 4) this.messages.shift();
+    if (this.messages.length > 15) this.messages.shift();
     this.broadcast('msg', msg);
 }
 
