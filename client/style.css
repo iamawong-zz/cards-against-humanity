@@ -321,6 +321,9 @@ a, a:visited, a:link, a:hover {
     width: 215px;
     margin: 0 0 30px 30px;
 }
+#content h2 { 
+    margin: 25px 0 25px 15px 
+}
 #wrap #content {
     margin-left: 270px;
     padding-bottom: 25px;
