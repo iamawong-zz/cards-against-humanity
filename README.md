@@ -11,7 +11,7 @@ After you clone:
 Run on dev:
        
        npm run-script env_dev
-       Visit [http://localhost:3000][2]
+       Visit [localhost][2]
 
 [1]: http://cardsagainsthumanity.com/
 [2]: http://localhost:3000/
