@@ -8,12 +8,9 @@ After you clone:
       git submodule update --init --recursive
       npm install
 
-Run on dev:
+To run:
        
        npm run-script env_dev
-
-Run on prod:
-
-       
+       visit http://localhost:3000
 
 [1]: http://cardsagainsthumanity.com/
