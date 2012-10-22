@@ -10,8 +10,11 @@ After you clone:
 
 Run on dev:
        
-       npm run-script env_dev
-       Visit [localhost](http://localhost:3000/)
+       npm run-script dev
+       Visit http://localhost:3000/
+
+Run on prod:
+
+       npm run-script prod
 
 [1]: http://cardsagainsthumanity.com/
-[2]: http://localhost:3000/
