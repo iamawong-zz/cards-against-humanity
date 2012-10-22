@@ -11,12 +11,7 @@ After you clone:
 Run on dev:
        
        npm run-script env_dev
-       node server.js
-
-Visit [http://localhost:3000](http://localhost:3000)
-
-Run on prod:
-
-       
+       Visit [http://localhost:3000][2]
 
 [1]: http://cardsagainsthumanity.com/
+[2]: http://localhost:3000
