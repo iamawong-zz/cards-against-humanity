@@ -14,4 +14,4 @@ Run on dev:
        Visit [http://localhost:3000][2]
 
 [1]: http://cardsagainsthumanity.com/
-[2]: http://localhost:3000
+[2]: http://localhost:3000/
