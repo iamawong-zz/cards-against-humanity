@@ -1,7 +1,6 @@
 var CLIENT_EVENTS = ['init', 'chat', 'select', 'submit', 'start'];
 
-var Game = function(socket, hash) {
-    this.socket = socket;
+var Game = function(hash) {
     this.players = [null, null, null, null, null, null, null, null, null, null];
     this.hash = hash;
     this.gameAdminIdx = 0;

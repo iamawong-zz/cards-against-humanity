@@ -42,6 +42,7 @@ function startGame() {
 }
 
 function initializeGame() {
+    console.log('initializin game');
     var sess = getCookie('sess') || randString(10);
     // Set the cookie for an hour.
     setCookie('sess', sess, 1.0/24);

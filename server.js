@@ -2,14 +2,10 @@ var http = require('http')
 , io = require('socket.io')
 , express = require('express')
 , connectnowww = require('connect-no-www')
-, fs = require('fs')
+, path = require('path')
 , ams = require('ams')
-, app
-, server
 , Game = require('./game')
 , games = {}
-, clientDir = __dirname + '/client'
-, depsDir = __dirname + '/deps'
 , publicDir = __dirname + '/public'
 , fontsDir = publicDir + '/fonts'
 , prod = process.env.NODE_ENV === 'production';
@@ -24,12 +20,11 @@ function configureFiles() {
     };
     ams.build
 	.create(publicDir)
-	.add(clientDir + '/client.js')
-	.add(clientDir + '/style.css')
-	.add(depsDir + '/headjs/src/load.js')
+	.add(path.resolve(path.join(__dirname, 'client'), './client.js'))
+	.add(path.resolve(path.join(__dirname, 'dependencies', 'headjs/src'), './load.js'))
 	.process(options)
 	.write(publicDir)
-	.end()    
+	.end();
 };
 
 function niceifyURL(req, res, next){
@@ -55,7 +50,7 @@ function getGame(hash) {
     }
     hash = getUnusedHash();
     console.log(hash);
-    return (games[hash] = new Game(socket, hash));
+    return (games[hash] = new Game(hash));
 }
 
 function getUnusedHash() {
@@ -77,14 +72,18 @@ function randString(num) {
 
 configureFiles();
 
-app = express()
-    .use(niceifyURL)
-    .use(express.logger(':status :remote-addr :url in :response-time ms'))
-    .use(connectnowww())
-    .use(express.static(publicDir), {maxAge: prod ? 86400000 : 0})
-    .use(express.static(fontsDir, {maxAge: prod ? 86400000 : 0}));
+var app = express();
 
-server = http.createServer(app).listen(prod ? 8080 : 3000);
+app.configure(function() {
+    app.use(express.logger(':status :remote-addr :url in :response-time ms'));
+    app.use(niceifyURL);
+    app.use(connectnowww());
+    app.use(express.static(publicDir, {maxAge: prod ? 86400000 : 0}));
+    app.use(express.static(fontsDir, {maxAge: prod ? 86400000 : 0}));
+});
+    
+
+var server = http.createServer(app).listen(prod ? 8080 : 3000);
 
 io = io.listen(server);
 
@@ -104,7 +103,7 @@ io.configure('production', function() {
 
 io.sockets.on('connection', function(socket) {
     var game = null;
-    io.on('initialize', function(msg) {
+    socket.on('initialize', function(msg) {
 	game = getGame(msg.hash);
 	game.registerPlayer(socket, msg.sess);
 	(game.handleClientMessage('initialize', socket)).call(game, msg);
@@ -113,7 +112,7 @@ io.sockets.on('connection', function(socket) {
 	}
     });
     
-    io.on('disconnect', function() {
+    socket.on('disconnect', function() {
 	if (!game) 
 	    return;
 	var hash = game.hash;
