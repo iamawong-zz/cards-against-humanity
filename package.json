@@ -13,14 +13,14 @@
 		       "url": "https://github.com/iamawong/cards-against-humanity"
 	},
 	"dependencies": {
+			"express"	: "3.x.x",
 			"ams"               : "0.0.x",
-			"connect"           : "2.0.x",
-            "connect-no-www"    : "0.1.x",
+			"connect-no-www"    : "0.1.x",
 			"socket.io"         : "0.9.x",
 			"supervisor"        : "0.3.x"
 	},
 	"license": "mit",
 	"engines": {
-		   "node": "0.6.x"
+		   "node": "0.8.x"
 	}
 }

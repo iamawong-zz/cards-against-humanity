@@ -1,9 +1,9 @@
 var http = require('http')
-, socket = require('socket.io')
+, io = require('socket.io')
+, express = require('express')
+, connectnowww = require('connect-no-www')
 , fs = require('fs')
 , ams = require('ams')
-, connect = require('connect')
-, connectnowww = require('connect-no-www')
 , app
 , server
 , Game = require('./game')
@@ -77,24 +77,23 @@ function randString(num) {
 
 configureFiles();
 
-app = connect()
-    .use(connect.logger(':status :remote-addr :url in :response-time ms'))
-    .use(connectnowww())
+app = express()
     .use(niceifyURL)
-    .use(connect.static(publicDir, {maxAge: prod ? 86400000 : 0}))
-    .use(connect.static(fontsDir, {maxAge: prod ? 86400000 : 0})
-);
+    .use(express.logger(':status :remote-addr :url in :response-time ms'))
+    .use(connectnowww())
+    .use(express.static(publicDir), {maxAge: prod ? 86400000 : 0})
+    .use(express.static(fontsDir, {maxAge: prod ? 86400000 : 0}));
 
 server = http.createServer(app).listen(prod ? 8080 : 3000);
 
-socket = socket.listen(server);
+io = io.listen(server);
 
-socket.configure('production', function() {
-  socket.enable('browser client minification');  // send minified client
-  socket.enable('browser client etag');          // apply etag caching logic based on version number
-  socket.enable('browser client gzip');          // gzip the file
-  socket.set('log level', 1);                    // reduce logging
-  socket.set('transports', [                     // enable all transports (optional if you want flashsocket)
+io.configure('production', function() {
+  io.enable('browser client minification');  // send minified client
+  io.enable('browser client etag');          // apply etag caching logic based on version number
+  io.enable('browser client gzip');          // gzip the file
+  io.set('log level', 1);                    // reduce logging
+  io.set('transports', [                     // enable all transports (optional if you want flashsocket)
       'websocket'
     , 'flashsocket'
     , 'htmlfile'
@@ -103,9 +102,9 @@ socket.configure('production', function() {
   ]);
 });
 
-socket.sockets.on('connection', function(socket) {
+io.sockets.on('connection', function(socket) {
     var game = null;
-    socket.on('initialize', function(msg) {
+    io.on('initialize', function(msg) {
 	game = getGame(msg.hash);
 	game.registerPlayer(socket, msg.sess);
 	(game.handleClientMessage('initialize', socket)).call(game, msg);
@@ -114,7 +113,7 @@ socket.sockets.on('connection', function(socket) {
 	}
     });
     
-    socket.on('disconnect', function() {
+    io.on('disconnect', function() {
 	if (!game) 
 	    return;
 	var hash = game.hash;
