@@ -33,20 +33,20 @@ function configureFiles() {
 };
 
 function niceifyURL(req, res, next){
-  if (/^\/game$/.exec(req.url)) {
-    res.writeHead(301, { 'Location': '/game/' });
-    return res.end();
-  }
-  if (/^\/game\//.exec(req.url)) {
-    req.url = '/game.html';
-  } else if (/^\/about/.exec(req.url)) {
-    req.url = '/about.html';
-  } else if (/^\/help/.exec(req.url)) {
-    req.url = '/help.html';
-  } else if (/^\/?$/.exec(req.url)) {
-    req.url = '/index.html';
-  }
-  return next();
+    if (/^\/game$/.exec(req.url)) {
+	res.writeHead(301, { 'Location': '/game/' });
+	return res.end();
+    }
+    if (/^\/game\//.exec(req.url)) {
+	req.url = '/game.html';
+    } else if (/^\/about/.exec(req.url)) {
+	req.url = '/about.html';
+    } else if (/^\/help/.exec(req.url)) {
+	req.url = '/help.html';
+    } else if (/^\/?$/.exec(req.url)) {
+	req.url = '/index.html';
+    }
+    return next();
 }
 
 function getGame(hash) {
