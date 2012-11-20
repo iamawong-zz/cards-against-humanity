@@ -2,30 +2,12 @@ var http = require('http')
 , io = require('socket.io')
 , express = require('express')
 , connectnowww = require('connect-no-www')
-, path = require('path')
-, ams = require('ams')
+, mongoose = require('mongoose')
 , Game = require('./game')
 , games = {}
 , publicDir = __dirname + '/public'
 , fontsDir = publicDir + '/fonts'
 , prod = process.env.NODE_ENV === 'production';
-
-function configureFiles() {
-    var options = {
-	uglifyjs: prod,
-	jstransport: false,
-	cssabspath: false,
-	cssdataimg: false,
-	texttransport: false
-    };
-    ams.build
-	.create(publicDir)
-	.add(path.resolve(path.join(__dirname, 'client'), './client.js'))
-	.add(path.resolve(path.join(__dirname, 'dependencies', 'headjs/src'), './load.js'))
-	.process(options)
-	.write(publicDir)
-	.end();
-};
 
 function niceifyURL(req, res, next){
     if (/^\/game$/.exec(req.url)) {
@@ -49,7 +31,7 @@ function getGame(hash) {
 	return games[hash];
     }
     hash = getUnusedHash();
-    console.log(hash);
+    console.log("New game with tag: " + hash);
     return (games[hash] = new Game(hash));
 }
 
@@ -70,7 +52,8 @@ function randString(num) {
     return string;
 }
 
-configureFiles();
+mongoose.connect('mongodb://localhost/cah');
+require('./initialize')();
 
 var app = express();
 
