@@ -2,12 +2,11 @@ var http = require('http')
 , io = require('socket.io')
 , express = require('express')
 , connectnowww = require('connect-no-www')
-, mongoose = require('mongoose')
+, config = require('./config')
 , Game = require('./game')
 , games = {}
 , publicDir = __dirname + '/public'
-, fontsDir = publicDir + '/fonts'
-, prod = process.env.NODE_ENV === 'production';
+, fontsDir = publicDir + '/fonts';
 
 function niceifyURL(req, res, next){
     if (/^\/game$/.exec(req.url)) {
@@ -52,7 +51,6 @@ function randString(num) {
     return string;
 }
 
-mongoose.connect('mongodb://localhost/cah');
 require('./initialize')();
 
 var app = express();
@@ -61,12 +59,11 @@ app.configure(function() {
     app.use(express.logger(':status :remote-addr :url in :response-time ms'));
     app.use(niceifyURL);
     app.use(connectnowww());
-    app.use(express.static(publicDir, {maxAge: prod ? 86400000 : 0}));
-    app.use(express.static(fontsDir, {maxAge: prod ? 86400000 : 0}));
+    app.use(express.static(publicDir, {maxAge: config.prod ? 86400000 : 0}));
+    app.use(express.static(fontsDir, {maxAge: config.prod ? 86400000 : 0}));
 });
-    
 
-var server = http.createServer(app).listen(prod ? 8080 : 3000);
+var server = http.createServer(app).listen(config.prod ? 8080 : 3000);
 
 io = io.listen(server);
 

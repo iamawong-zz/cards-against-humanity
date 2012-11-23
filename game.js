@@ -1,6 +1,7 @@
 var CLIENT_EVENTS = ['init', 'chat', 'select', 'submit', 'start']
-, models = require('./models')
-, Game = function(hash) {
+, models = require('./models');
+
+var Game = function(hash) {
     this.players = [null, null, null, null, null, null, null, null, null, null];
     this.hash = hash;
     this.gameAdminIdx = 0;
@@ -8,26 +9,8 @@ var CLIENT_EVENTS = ['init', 'chat', 'select', 'submit', 'start']
     this.blackDeck = [];
     this.whiteDeck = [];
     this.black = "";
-
     this.started = false;
 };
-
-Game.prototype.resetDeck = function() {
-    this.blackDeck = this.getBlackDeck();
-    this.whiteDeck = this.getWhiteDeck();
-
-    shuffle(this.blackDeck);
-    shuffle(this.whiteDeck);
-}
-
-Game.prototype.reset = function() {
-    this.resetDeck();
-    this.players.forEach(function(player) {
-	if (null !== player) 
-	    player.score = 0;
-    });
-    this.tzarIdx = -1;
-}
 
 Game.prototype.registerPlayer = function(socket, session) {
     if (this.getNumPlayers() >= this.players.length) {
@@ -70,13 +53,13 @@ Game.prototype.unregisterPlayer = function(socket, gameDone) {
 }
 
 Game.prototype.firstFreePlayerSlot = function() {
-  for (var i = 0; i < this.players.length; i++) {
-    if (this.players[i] === null) return i;
-  }
-  for (var i = 0; i < this.players.length; i++) {
-    if (!this.players[i].online) return i;
-  }
-  return 0;    
+    for (var i = 0; i < this.players.length; i++) {
+	if (this.players[i] === null) return i;
+    }
+    for (var i = 0; i < this.players.length; i++) {
+	if (!this.players[i].online) return i;
+    }
+    return 0;    
 }
 
 Game.prototype.getPlayerIndex = function(socket) {
@@ -189,6 +172,9 @@ Game.prototype.getWhiteCard = function() {
 }
 
 Game.prototype.nextRound = function() {
+    if (0 < this.deckUpdatesRemaining) {
+	return;
+    }
     this.submittedWhites = [];
     if (this.blackDeck.length <= 0) {
 	this.broadcast('gameover');
@@ -311,8 +297,16 @@ Game.prototype.submitBroadcast = function() {
 }
 
 Game.prototype.start = function() {
-    this.reset();
+    this.players.forEach(function(player) {
+	if (null !== player) 
+	    player.score = 0;
+    });
+    this.tzarIdx = -1;
     this.started = true;
+    this.resetDeck();
+}
+
+Game.prototype.refillPlayerHand = function() {
     for (var i = 0; i < this.players.length; i++) {
 	var player = this.players[i];
 	if (!this.isActivePlayer(player)) {
@@ -320,22 +314,36 @@ Game.prototype.start = function() {
 	}
 	this.fixPlayerHand(i);
     }
-    this.nextRound();
+}
+
+Game.prototype.resetDeck = function(){
+    this.deckUpdatesRemaining = 2;
+    this.getBlackDeck();
+    this.getWhiteDeck();
 }
 
 Game.prototype.getBlackDeck = function() {
-    return models.BlackDeck.findOne({ name : /default/i }, function (err, cardsResult) {
-	return cardsResult.cards.map(function (card) {
-	    return new BlackCard(card.desc);
+    var self = this;
+    models.BlackCard.find({ deck : /default/i }, function(err, queryResult) {
+	var blackDeck = queryResult.map(function(card) {
+	    return new BlackCard(card.desc, card.playstyle)
 	});
+	self.blackDeck = shuffle(blackDeck);
+	self.deckUpdatesRemaining -= 1;
+	self.nextRound();
     });
 }
 
 Game.prototype.getWhiteDeck = function() {
-    return models.WhiteDeck.findOne({ name : /default/i }, function (err, cardsResult) {
-	return cardsResult.cards.map(function (card) {
+    var self = this;
+    models.WhiteCard.find({ deck : /default/i }, function (err, queryResult) {
+	var whiteDeck = queryResult.map(function(card) {
 	    return new WhiteCard(card.desc);
 	});
+	self.whiteDeck = shuffle(whiteDeck);
+	self.deckUpdatesRemaining -= 1;
+	self.refillPlayerHand();
+	self.nextRound();
     });
 }
 

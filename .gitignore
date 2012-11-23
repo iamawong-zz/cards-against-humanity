@@ -1,4 +1,6 @@
 node_modules
+config.js
+populateDB.js
 public/*.js
 public/*.css
 npm-debug.log

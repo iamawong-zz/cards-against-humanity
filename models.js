@@ -1,31 +1,25 @@
 var mongoose = require('mongoose')
-, db = mongoose.createConnection('localhost', 'cah')
-, Schema = mongoose.Schema;
+, Schema = mongoose.Schema
+, config = require('./config');
+
+var db = mongoose.createConnection(config.mongo);
 
 var BlackCard = new Schema({
+    basedeck : { type : Boolean, default : false },
+    deck : String,
     desc: String,
-    type: Number
-});
-
-var BlackDeck = new Schema({
-    name: String,
-    cards: [BlackCard]
+    playstyle: { type : Number, default : 1 }
 });
 
 var WhiteCard = new Schema({
+    basedeck : { type : Boolean, default : false },
+    deck : String,
     desc: String
 });
 
-var WhiteDeck = new Schema({
-    name: String,
-    cards: [WhiteCard]
-});
-
 var models = {
-    BlackCard : db.model('BlackCard', BlackCard),
-    BlackDeck : db.model('BlackDeck', BlackDeck),
-    WhiteCard : db.model('WhiteCard', WhiteCard),
-    WhiteDeck : db.model('WhiteDeck', WhiteDeck),
+    BlackCard : db.model('blackcards', BlackCard),
+    WhiteCard : db.model('whitecards', WhiteCard)
 };
 
 module.exports = models;
