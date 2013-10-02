@@ -1,13 +1,12 @@
 /*
-Script to populate both the dev and prod MongoHQ databases.
+Script to populate the MongoDB database.
 */
 
 var mongoose = require('mongoose')
 , Schema = mongoose.Schema;
 
 // Replace here on your mongo server and rename file to populateDB.js
-var devDB = mongoose.createConnection();
-var prodDB = mongoose.createConnection();
+var db = mongoose.createConnection('mongodb://user:pass@host:port/dbname');
 
 var BlackCard = new Schema({
     basedeck : { type : Boolean, default : false },
@@ -15,7 +14,7 @@ var BlackCard = new Schema({
     desc : String,
     playstyle: { type : Number, default : 1 }
 });
-BlackCard = devDB.model('blackcards', BlackCard);
+BlackCard = db.model('blackcards', BlackCard);
 getBlackCards().map(function(card) {
     card.save(function(err, card) {
 	if (err) {
@@ -29,7 +28,7 @@ var WhiteCard = new Schema({
     deck : String,
     desc: String
 });
-WhiteCard = devDB.model('whitecards', WhiteCard);
+WhiteCard = db.model('whitecards', WhiteCard);
 getWhiteCards().map(function(card) {
     card.save(function(err, card) {
 	if (err) {
